@@ -10,5 +10,5 @@
 #include "project_functions.h"
 #include "storage_functions.h"
 
-//void searchByParam(PROFILE *user_account, const char* profile_parameter);
-void quicksortProfiles();
+//void searchByParam(PROFILE* user_account, const char* profile_parameter);
+void sortProfiles();

@@ -10,16 +10,20 @@
 #include "storage_functions.h"
 #include "sort_find.h"
 
-int confirmAction(char request) {
+int confirmAction() {
+	char request = '32';
+	printf("\n");
+	printf("Are you sure you wish to proceed?\n Enter 'Y' to confirm, or 'N' to go back: \n");
+	scanf(" %c", &request);
 	if (request == 'Y' || request == 'y') {
 		return 0;
 	}
 	else if (request == 'N' || request == 'n') {
-		printf("\n\t>Reverting previous choice...");
+		printf("\t>Reverting previous choice...");
 		return 1;
 	}
 	else {
-		printf("\n>Something went wrong while requesting confirmation of a decision.");
+		printf("\t>Something went wrong while requesting confirmation of a decision.");
 		return -1;
 	}
 }
@@ -33,6 +37,7 @@ void checkSelection(int selection) {
 	}
 	else if (selection == AREG) {
 		accountRegistration();
+		//copyToTxt();
 	}
 	else if (selection == LOGIN) {
 		//displayAccountMenu();
@@ -77,23 +82,23 @@ void checkSelection(int selection) {
 	}
 }
 
+//// REGISTRATION
+
 void accountRegistration() {
 	printf(">REGISTRATION WINDOW ------------------------------------------------ \n");
 	printf(">Register new User: \n");
 	printf("\t>Username: \n");
-	//void enterUsername(const char* username);
+	//void enterUsername();
 	printf("\t>E-mail: \n");
-	//void enterEmail(const char*);
-	printf("\t>Confirm e-mail: \n");
-	//const char* confirmEmail(const char*);
-	printf("\t>Country: \n");
-	//void enterRegion(const char* region);
+	//void enterEmail();
+	printf("\t>Country/Region: \n");
+	//void enterRegion();
 	printf("\t>Gender: \n");
-	//void enterGender(char oneLetter);
-	printf("\t>Age in years: \n");
-	//void enterDateOfBirth(DATE* age);
+	//void enterGender();
+	printf("\t>Birthday: \n");
+	//void enterDate();
 	printf("\t>Interests/hobbies: \n");
-	//void enterHobby(char* hobbyPointer);
+	//void enterHobby();
 	printf(">REGISTRATION WINDOW ------------------------------------------------ \n ");
 }
 /*
@@ -105,28 +110,63 @@ void accountRegistration() {
 	char gender; //prima jedan znak // F (female), M (male), N (nonbinary), O (other)
 	DATE* birthday;
 	char userHobby[30];
+	DATE* userSince;
 	short userID;
-	//short hasAdminPerms; // (0 - No, 1 - Yes)
 */
 
-void enterUsername(char* const username) {
+void enterUsername(const char* nickname) {
+	//scanf("%[^\n]", &nickname);
+}
+
+void enterEmail(const char* email, const char* emailVerif) {
+	/*scanf("%[^\n]", &email);
+	printf("\t>Confirm e-mail: \n");
+	scanf("%[^\n]", &emailVerif);
+	do {
+		enterEmail(email, emailVerif);
+		if (emailVerif != email) {
+			printf("\t\t>Could not verify e-mail! Please try again.");
+		}
+	} while (emailVerif != email);
+	if (emailVerif == email) {
+		printf("\t\t>E-mail verification successful.");
+	}*/
+}
+
+void enterRegion(const char* region) {
 
 }
 
+void enterGender(char oneLetter) {
 
+}
+
+void enterDate(DATE* chosenDate) {
+
+}
+
+void enterHobby(char* hobbyPointer) {
+
+}
+
+//// DEACTIVATION
 
 void accountDeactivation() {
 
 }
 
+//// DELETION
+
 void accountDeletion() {
 
 }
+
+//// SORTING & SEARCHING ACCOUNTS
 
 //void searchByParam(PROFILE *user_account, const char* profile_parameter) {
 
 //}
 
-void quicksortProfiles() {
+void sortProfiles() {
 
 }

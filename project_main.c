@@ -18,6 +18,6 @@
 //// MAIN EXECUTION
 int main() {
 	menuMain();
-
+	confirmAction();
 	return 0;
 }

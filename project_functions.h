@@ -19,22 +19,18 @@ typedef struct dayInTime {
 	char day[3];
 }DATE, DATE_UNDEFINED; 
 
-//// SENSITIVE INFO STRUCT
-typedef struct personalInfo {
-	char* const region;
-	char gender;
-	DATE* birthday;
-	char userHobby[30];
-}SENSITIVE_INFO;
-
 //// USER PROFILE STRUCT
 typedef struct userData {
 	char* const username;
 	char* const password;
 	char* const email;
 	char* const confirmEmail;
+	char* const region;
+	char gender;
+	DATE* birthday;
+	char userHobby[30];
+	DATE* userSince;
 	short userID;
-	SENSITIVE_INFO userInfo;
 }PROFILE, PROFILE_EMPTY;
 
 ////-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-////
@@ -45,12 +41,21 @@ void checkSelection(int selection);
 void clearHistory();
 void backToMenu();
 
-int confirmAction(char request);
+int confirmAction();
 
 ////-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-////
 //// USER ACCOUNT FUNCTIONS
+// 
+// SUBFUNCTIONS
 
-void enterUsername(char* const username);
+void enterUsername(const char* nickname);
+void enterEmail(const char* email, const char* emailVerif);
+void enterRegion(const char* region);
+void enterGender(char oneLetter);
+void enterDate(DATE* chosenDate);
+void enterHobby(char* hobbyPointer);
+
+// MAIN MENU FUNCTIONS
 //void changeUsername(PROFILE *user_account);
 void accountRegistration();
 void accountLogin();
