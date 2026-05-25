@@ -28,9 +28,13 @@ int confirmAction() {
 	}
 }
 
+void refreshPage() {
+
+}
+
 void checkSelection(int selection) {
-	
-	enum startMenu{ EXIT, AREG, LOGIN, LOGOUT, DELETE, ADEACT, ACONFIG, MEM_ERASE, T_CLEAR, T_RUNTIME };
+
+	enum startMenu { EXIT, AREG, LOGIN, LOGOUT, DELETE, ADEACT, ACONFIG, MEM_ERASE, T_CLEAR, T_RUNTIME };
 	if (selection == EXIT) {
 		printf("\n>Exiting application...");
 		exit(0);
@@ -64,8 +68,9 @@ void checkSelection(int selection) {
 		//chooseAccount();
 		//settingsMenu();
 		//chooseSetting();
+		// 
+		//configureName();
 		// ...
-		//configure...();
 	}
 	else if (selection == MEM_ERASE) {
 		//freeAllAccounts();
@@ -73,11 +78,10 @@ void checkSelection(int selection) {
 		//clearFileTxt();
 	}
 	else if (selection == T_CLEAR) {
-		//clearTerminal();
-		//goToBeginning();
+		//refreshPage();
 	}
 	else if (selection == T_RUNTIME) {
-		//fetchTaskRuntime();
+		//fetchRuntime();
 		//displayTotalRuntime();
 	}
 }
@@ -149,15 +153,66 @@ void enterHobby(char* hobbyPointer) {
 
 }
 
-//// DEACTIVATION
+void copyToTxt() {
 
-void accountDeactivation() {
+}
+
+//// LOG INTO ACCOUNT
+void chooseAccount() {
+
+}
+
+void accountLogin() {
+
+}
+
+//// LOG OUT OF ACCOUNT
+void accountLogout() {
 
 }
 
 //// DELETION
 
-void accountDeletion() {
+void deleteAccount() {
+
+}
+
+//// DEACTIVATION
+
+void deactivateAccount() {
+
+}
+
+//// ACCOUNT SETTINGS CONFIGURATION
+
+void chooseSetting() {
+
+}
+
+//// MEMORY WIPE (EMPTYING THE TXT FILE AND FREEING UP DYNAMIC MEMORY)
+void freeAllAccounts() {
+
+}
+
+void memsetZeros() {
+
+}
+
+void clearFileTxt() {
+
+}
+
+//// CLEAR TERMINAL
+void refreshPage() {
+
+}
+
+//// TOTAL VSTUDIO TERMINAL RUNTIME
+void fetchRuntime() {
+
+}
+
+void displayTotalRuntime() {
 
 }
 

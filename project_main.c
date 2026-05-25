@@ -15,9 +15,18 @@
 #include "storage_functions.h"
 #include "sort_find.h"
 
-//// MAIN EXECUTION
+//// MAIN PROGRAM EXECUTION
 int main() {
+
+	FILE* textFilePointer = NULL;
+	const char* fileName = "account_storage.txt";
+	textFilePointer = fopen(fileName, "w+");
+
+	openFileTxt(textFilePointer, "account_storage.txt");
 	menuMain();
 	confirmAction();
+	closeFileTxt(textFilePointer);
+
 	return 0;
+
 }

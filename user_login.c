@@ -9,6 +9,4 @@
 #include "storage_functions.h"
 #include "sort_find.h"
 
-void accountLogin() {
-
-}
+//to be deleted

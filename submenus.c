@@ -11,7 +11,7 @@
 #include "storage_functions.h"
 #include "sort_find.h"
 
-enum startMenu {EXIT, AREG, LOGIN, LOGOUT, DELETE, ADEACT, ACONFIG, MEM_ERASE, T_CLEAR, T_RUNTIME}OPTIONS;
+enum startMenu { EXIT, AREG, LOGIN, LOGOUT, DELETE, ADEACT, ACONFIG, MEM_ERASE, T_CLEAR, T_RUNTIME }OPTIONS;
 
 void menuMain() {
 	int selection = 0;
@@ -54,5 +54,13 @@ void clearHistory() {
 }
 
 void backToMenu() {
+
+}
+
+void displayAccountMenu() {
+
+}
+
+void settingsMenu() {
 
 }

@@ -17,7 +17,7 @@ typedef struct dayInTime {
 	char year[5];
 	char month[3];
 	char day[3];
-}DATE, DATE_UNDEFINED; 
+}DATE, DATE_UNDEFINED;
 
 //// USER PROFILE STRUCT
 typedef struct userData {
@@ -56,10 +56,26 @@ void enterDate(DATE* chosenDate);
 void enterHobby(char* hobbyPointer);
 
 // MAIN MENU FUNCTIONS
-//void changeUsername(PROFILE *user_account);
+void chooseAccount();
+void displayAccountMenu();
+
 void accountRegistration();
+void copyToTxt();
+
 void accountLogin();
-void accountDeactivation();
-void accountDeletion();
+void accountLogout();
+void deleteAccount();
+void deactivateAccount();
+
+void settingsMenu();
+void chooseSetting();
+
+void freeAllAccounts();
+void memsetZeros();
+void clearFileTxt();
+
+void refreshPage();
+void fetchRuntime();
+void displayTotalRuntime();
 
 

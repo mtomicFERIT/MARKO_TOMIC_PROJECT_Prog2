@@ -9,3 +9,12 @@
 #include "storage_functions.h"
 #include "sort_find.h"
 
+//// OPENING FILE
+void openFileTxt(FILE* textFilePointer, const char* fileName) {
+	textFilePointer = fopen(fileName, "w+");
+}
+
+//// CLOSING FILE
+void closeFileTxt(FILE* textFilePointer) {
+	fclose(textFilePointer);
+}

@@ -10,4 +10,7 @@
 #include "project_functions.h"
 #include "sort_find.h"
 
-
+////-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-////
+//// TEXT FILE (.txt)
+void openFileTxt(FILE* textFilePointer, const char* fileName);
+void closeFileTxt(FILE* textFilePointer);
