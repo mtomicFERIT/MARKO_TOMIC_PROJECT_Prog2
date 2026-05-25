@@ -11,25 +11,21 @@
 #include "sort_find.h"
 
 int confirmAction() {
-	char request = '32';
+	char request = '0';
 	printf("\n");
-	printf("Are you sure you wish to proceed?\n Enter 'Y' to confirm, or 'N' to go back: \n");
+	printf(">Are you sure you wish to proceed?\n Enter 'Y' to confirm, or 'N' to go back: \n");
 	scanf(" %c", &request);
 	if (request == 'Y' || request == 'y') {
 		return 0;
 	}
 	else if (request == 'N' || request == 'n') {
-		printf("\t>Reverting previous choice...");
+		printf(">Reverting previous choice...");
 		return 1;
 	}
 	else {
 		printf("\t>Something went wrong while requesting confirmation of a decision.");
 		return -1;
 	}
-}
-
-void refreshPage() {
-
 }
 
 void checkSelection(int selection) {
