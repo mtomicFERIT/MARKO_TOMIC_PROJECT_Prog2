@@ -1,14 +1,18 @@
 //// USER_FUNCTIONS.C
 #pragma once
 #define _CRT_SECURE_NO_WARNINGS
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <corecrt_search.h>
-//#include <corecrt.h>
+//// LIBRARIES
 #include "project_functions.h"
 #include "storage_functions.h"
 #include "sort_find.h"
+//// DEFAULT
+#include <ctype.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <time.h>
+#include <corecrt_search.h>
+//#include <corecrt.h>
 
 int confirmAction() {
 	char request = '0';
@@ -114,11 +118,11 @@ void accountRegistration() {
 	short userID;
 */
 
-void enterUsername(const char* nickname) {
+void enterUsername(char* nickname, PROFILE* currentProfile) {
 	//scanf("%[^\n]", &nickname);
 }
 
-void enterEmail(const char* email, const char* emailVerif) {
+void enterEmail(char* email, char* emailVerif, PROFILE* currentProfile) {
 	/*scanf("%[^\n]", &email);
 	printf("\t>Confirm e-mail: \n");
 	scanf("%[^\n]", &emailVerif);
@@ -133,23 +137,40 @@ void enterEmail(const char* email, const char* emailVerif) {
 	}*/
 }
 
-void enterRegion(const char* region) {
+void enterRegion(char* region, PROFILE* currentProfile) {
 
 }
 
-void enterGender(char oneLetter) {
+void enterGender(char oneLetter, PROFILE* currentProfile) { //(char oneLetter, PROFILE* currentProfile) {...}
+	scanf(" %c", &oneLetter);
+	if (oneLetter == 'F' || oneLetter == 'M' || oneLetter == 'N' || oneLetter == 'O') {
+		//store to currentProfile
+	}
+	else {
+		printf(">Gender could not be logged. Please choose only one among the options provided.");
+	}
+}
+
+void enterDate(DATE* chosenDate, PROFILE* currentProfile) {
+	scanf("%d", chosenDate->day);
+	if (chosenDate->day > 31 || chosenDate->day < 1) {
+		printf(">Invalid day! Please enter again.");
+	}
+	scanf("%d", chosenDate->month);
+	if (chosenDate->month > 12 || chosenDate->month < 1) {
+		printf(">Invalid month! Please enter again.");
+	}
+	scanf("%d", chosenDate->year);
+	if (chosenDate->year > 2026 || chosenDate->year < 1903) {
+		printf(">Invalid year! Please enter again.");
+	}
+}
+
+void enterHobby(char* hobbyPointer, PROFILE* currentProfile) {
 
 }
 
-void enterDate(DATE* chosenDate) {
-
-}
-
-void enterHobby(char* hobbyPointer) {
-
-}
-
-void copyToTxt() {
+void copyToTxt(PROFILE* currentProfile, FILE* storage) {
 
 }
 
@@ -179,45 +200,47 @@ void deactivateAccount() {
 
 }
 
-//// ACCOUNT SETTINGS CONFIGURATION
-
-void chooseSetting() {
-
-}
-
-//// MEMORY WIPE (EMPTYING THE TXT FILE AND FREEING UP DYNAMIC MEMORY)
-void freeAllAccounts() {
-
-}
-
-void memsetZeros() {
-
-}
-
-void clearFileTxt() {
-
-}
-
 //// CLEAR TERMINAL
 void refreshPage() {
 
 }
 
 //// TOTAL VSTUDIO TERMINAL RUNTIME
-void fetchRuntime() {
+FMTIME fetchDisplayRuntime() {
 
 }
 
-void displayTotalRuntime() {
-
-}
 
 //// SORTING & SEARCHING ACCOUNTS
-
-//void searchByParam(PROFILE *user_account, const char* profile_parameter) {
-
-//}
-
-void sortProfiles() {
+void searchByUsername(char* username, char* usernameMatch) {
 
 }
+
+void searchByRegion(char* region, char* regionMatch) {
+
+}
+
+void searchByHobby(char* hobby, char* hobbyMatch) {
+
+}
+
+void sortGeneric(int iter, PROFILE* profile) {
+
+}
+
+void sortByAlphabet(int iter, PROFILE* profile) {
+
+}
+
+void sortByUser(int iter, PROFILE* profile) {
+
+}
+
+void sortByRegion(int iter, PROFILE* profile) {
+
+}
+
+void sortByHobby(int iter, PROFILE* profile) {
+
+}
+

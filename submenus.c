@@ -1,15 +1,18 @@
 //// SUBMENUS.C
 #pragma once
 #define _CRT_SECURE_NO_WARNINGS
+//// LIBRARIES
+#include "project_functions.h"
+#include "storage_functions.h"
+#include "sort_find.h"
+//// DEFAULT
 #include <ctype.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <time.h>
 #include <corecrt_search.h>
 //#include <corecrt.h>
-#include "project_functions.h"
-#include "storage_functions.h"
-#include "sort_find.h"
 
 enum startMenu { EXIT, AREG, LOGIN, LOGOUT, DELETE, ADEACT, ACONFIG, MEM_ERASE, T_CLEAR, T_RUNTIME }OPTIONS;
 

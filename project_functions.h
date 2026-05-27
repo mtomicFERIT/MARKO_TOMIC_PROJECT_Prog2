@@ -1,37 +1,47 @@
 //// PROJECT_FUNCTIONS.H 
 #pragma once
 #define _CRT_SECURE_NO_WARNINGS
-#include <stdio.h>
-#include <stdlib.h>
-#include <ctype.h>
-#include <corecrt_search.h>
-//#include <corecrt.h>
+//// LIBRARIES
 #include "storage_functions.h"
 #include "sort_find.h"
+//// DEFAULT
+#include <ctype.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <time.h>
+#include <corecrt_search.h>
+//#include <corecrt.h>
 
 ////-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-////
 //// STRUCTURES
 //
+//// FMTIME STRUCT (Formatted Time)
+typedef struct runtime {
+	int seconds;
+	int minutes;
+}FMTIME;
+
 //// DATE STRUCT
 typedef struct dayInTime {
-	char year[5];
-	char month[3];
-	char day[3];
-}DATE, DATE_UNDEFINED;
+	int year;
+	int month;
+	int day;
+}DATE;
 
-//// USER PROFILE STRUCT
+//// USER ACCOUNT STRUCT
 typedef struct userData {
-	char* const username;
-	char* const password;
-	char* const email;
-	char* const confirmEmail;
-	char* const region;
+	char username[30];
+	char password[30];
+	char email[50];
+	char confirmEmail[50];
+	char region[50];
 	char gender;
-	DATE* birthday;
+	DATE birthday;
 	char userHobby[30];
-	DATE* userSince;
+	DATE userSince;
 	short userID;
-}PROFILE, PROFILE_EMPTY;
+}PROFILE;
 
 ////-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-////
 //// MENU FUNCTIONS
@@ -44,23 +54,28 @@ void backToMenu();
 int confirmAction();
 
 ////-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-////
+//// GENERIC FUNCTIONS
+int isPointerValidProfile(PROFILE* profilePTR);
+int isPointerValidString(char* charPTR);
+
+////-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-////
 //// USER ACCOUNT FUNCTIONS
 // 
 // SUBFUNCTIONS
 
-void enterUsername(const char* nickname);
-void enterEmail(const char* email, const char* emailVerif);
-void enterRegion(const char* region);
-void enterGender(char oneLetter);
-void enterDate(DATE* chosenDate);
-void enterHobby(char* hobbyPointer);
+void enterUsername(char* nickname, PROFILE* currentProfile);
+void enterEmail(char* email, char* emailVerif, PROFILE* currentProfile);
+void enterRegion(char* region, PROFILE* currentProfile);
+void enterGender(char oneLetter, PROFILE* currentProfile);
+void enterDate(DATE* chosenDate, PROFILE* currentProfile);
+void enterHobby(char* hobbyPointer, PROFILE* currentProfile);
 
 // MAIN MENU FUNCTIONS
 void chooseAccount();
 void displayAccountMenu();
 
 void accountRegistration();
-void copyToTxt();
+void copyToTxt(PROFILE* currentProfile, FILE* storage);
 
 void accountLogin();
 void accountLogout();
@@ -68,14 +83,13 @@ void deleteAccount();
 void deactivateAccount();
 
 void settingsMenu();
-void chooseSetting();
+int chooseSetting();
 
 void freeAllAccounts();
 void memsetZeros();
-void clearFileTxt();
+void clearFileTxt(FILE* txt);
 
 void refreshPage();
-void fetchRuntime();
-void displayTotalRuntime();
+FMTIME fetchDisplayRuntime();
 
 
