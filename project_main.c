@@ -16,11 +16,11 @@
 //#include <corecrt.h>
 
 ////CODE VISIBLE TO ALL FUNCTIONS // GLOBAL VARIABLES
-
+FILE* textFilePointer = NULL;
 //// MAIN PROGRAM EXECUTION
 int main() {
 
-	FILE* textFilePointer = NULL;
+	extern FILE* textFilePointer;
 	const char* fileName = "account_storage.txt";
 	textFilePointer = fopen(fileName, "w+");
 

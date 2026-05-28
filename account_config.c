@@ -16,7 +16,8 @@
 
 //// ACCOUNT SETTINGS CONFIGURATION
 int chooseSetting() {
-
+	int accSettingChosen = 0;
+	return accSettingChosen;
 }
 
 //// CHANGING SPECIFIC SETTING(S)

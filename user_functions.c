@@ -14,6 +14,8 @@
 #include <corecrt_search.h>
 //#include <corecrt.h>
 
+extern FILE* textFilePointer;
+
 int confirmAction() {
 	char request = '0';
 	printf("\n");
@@ -37,6 +39,8 @@ void checkSelection(int selection) {
 	enum startMenu { EXIT, AREG, LOGIN, LOGOUT, DELETE, ADEACT, ACONFIG, MEM_ERASE, T_CLEAR, T_RUNTIME };
 	if (selection == EXIT) {
 		printf("\n>Exiting application...");
+		freeAllAccounts(textFilePointer);
+		memsetZeros(textFilePointer);
 		exit(0);
 	}
 	else if (selection == AREG) {
@@ -152,15 +156,15 @@ void enterGender(char oneLetter, PROFILE* currentProfile) { //(char oneLetter, P
 }
 
 void enterDate(DATE* chosenDate, PROFILE* currentProfile) {
-	scanf("%d", chosenDate->day);
+	scanf("%d", &(chosenDate->day));
 	if (chosenDate->day > 31 || chosenDate->day < 1) {
 		printf(">Invalid day! Please enter again.");
 	}
-	scanf("%d", chosenDate->month);
+	scanf("%d", &(chosenDate->month));
 	if (chosenDate->month > 12 || chosenDate->month < 1) {
 		printf(">Invalid month! Please enter again.");
 	}
-	scanf("%d", chosenDate->year);
+	scanf("%d", &(chosenDate->year));
 	if (chosenDate->year > 2026 || chosenDate->year < 1903) {
 		printf(">Invalid year! Please enter again.");
 	}
@@ -207,7 +211,8 @@ void refreshPage() {
 
 //// TOTAL VSTUDIO TERMINAL RUNTIME
 FMTIME fetchDisplayRuntime() {
-
+	FMTIME totalRuntime;
+	//return totalRunTime;
 }
 
 

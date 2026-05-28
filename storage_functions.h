@@ -19,6 +19,13 @@ typedef struct userData PROFILE;
 void openFileTxt(FILE* textFilePointer, const char* fileName);
 int checkFileTxt(FILE* textFilePointer);
 void closeFileTxt(FILE* textFilePointer);
-//// ACCOUNT FUNCTIONS
+//// ACCOUNT CREATE//READ//INSERT//UPDATE//DELETE (CRUD) FUNCTIONS
+void storeAccount(FILE* textFilePointer);
+void deleteAccount();
+void deactivateAccount();
+void freeAllAccounts(FILE* textFilePointer);
+void memsetZeros(FILE* textFilePointer);
+void clearFileTxt(FILE* txt);
+//// ACCOUNT SETTINGS CONFIGURATION
 void changeUsername(PROFILE* user_account);
 

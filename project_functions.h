@@ -79,15 +79,9 @@ void copyToTxt(PROFILE* currentProfile, FILE* storage);
 
 void accountLogin();
 void accountLogout();
-void deleteAccount();
-void deactivateAccount();
 
 void settingsMenu();
 int chooseSetting();
-
-void freeAllAccounts();
-void memsetZeros();
-void clearFileTxt(FILE* txt);
 
 void refreshPage();
 FMTIME fetchDisplayRuntime();
