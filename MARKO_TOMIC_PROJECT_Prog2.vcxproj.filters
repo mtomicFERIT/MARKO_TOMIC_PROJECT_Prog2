@@ -24,9 +24,6 @@
     <ClCompile Include="data_storing.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="user_login.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="account_config.c">
       <Filter>Source Files</Filter>
     </ClCompile>

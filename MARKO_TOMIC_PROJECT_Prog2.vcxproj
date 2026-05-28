@@ -133,7 +133,6 @@
     <ClCompile Include="project_main.c" />
     <ClCompile Include="submenus.c" />
     <ClCompile Include="user_functions.c" />
-    <ClCompile Include="user_login.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="project_functions.h" />
