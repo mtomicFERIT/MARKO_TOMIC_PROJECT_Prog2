@@ -39,13 +39,18 @@ void menuMain() {
 	do {
 		scanf("%d", &selection);
 		if (selection < 0 || selection >= 10) {
-			printf(">Selection cannot be decimal or negative.\n");
+			printf(">Selection cannot be decimal or negative!\n");
 			printf(">Selection must be in the range from 0 to 9.\n");
 			printf(">Please input a new number to select an action: \t");
 		}
-	} while (selection < 0 || selection >= 10);
+		else if ((isalpha(selection))) {
+			printf(">Please enter a number!\n");
+			printf(">Exiting program... \t");
+			exit(EXIT_FAILURE);
+		}
+	} while ((selection < 0 || selection >= 10));
 
-	printf(">Selection memorised.\n");
+	printf("\n>Selection memorised.\n");
 	printf(">Option selected: %d\n", selection);
 
 	checkSelection(selection);

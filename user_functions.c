@@ -19,18 +19,19 @@ extern FILE* textFilePointer;
 int confirmAction() {
 	char request = '0';
 	printf("\n");
-	printf(">Are you sure you wish to proceed?\n Enter 'Y' to confirm, or 'N' to go back: \n");
+	printf(">Are you sure you wish to proceed?\n Enter 'Y' to confirm, or 'N' to exit: \n");
 	scanf(" %c", &request);
 	if (request == 'Y' || request == 'y') {
 		return 0;
 	}
 	else if (request == 'N' || request == 'n') {
-		printf(">Reverting previous choice...");
-		return 1;
+		printf(">Exiting program...");
+		exit(EXIT_SUCCESS);
 	}
 	else {
-		printf("\t>Something went wrong while requesting confirmation of a decision.");
-		return -1;
+		printf(">Something went wrong while requesting confirmation of a decision.");
+		confirmAction();
+		return 0;
 	}
 }
 
@@ -38,9 +39,9 @@ void checkSelection(int selection) {
 
 	enum startMenu { EXIT, AREG, LOGIN, LOGOUT, DELETE, ADEACT, ACONFIG, MEM_ERASE, T_CLEAR, T_RUNTIME };
 	if (selection == EXIT) {
-		printf("\n>Exiting application...");
 		freeAllAccounts(textFilePointer);
 		memsetZeros(textFilePointer);
+		printf("\n>Exiting application...");
 		exit(0);
 	}
 	else if (selection == AREG) {
