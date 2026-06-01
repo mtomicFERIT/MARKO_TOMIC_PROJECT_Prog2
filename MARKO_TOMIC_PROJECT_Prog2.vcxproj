@@ -139,6 +139,9 @@
     <ClInclude Include="sort_find.h" />
     <ClInclude Include="storage_functions.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="account_storage.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

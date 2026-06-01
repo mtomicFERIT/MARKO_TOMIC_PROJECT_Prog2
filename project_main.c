@@ -2,6 +2,8 @@
 ////-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-////
 #define _CRT_SECURE_NO_WARNINGS
 #pragma once
+#define BOOLTRUE 1
+#define BOOLFALSE 0
 //// LIBRARIES
 #include "project_functions.h"
 #include "storage_functions.h"
@@ -15,8 +17,27 @@
 #include <corecrt_search.h>
 //#include <corecrt.h>
 
-////CODE VISIBLE TO ALL FUNCTIONS // GLOBAL VARIABLES
+////CODE VISIBLE TO ALL FUNCTIONS // GLOBAL VARIABLES & INLINE FUNCTIONS
 FILE* textFilePointer = NULL;
+
+inline int increment(int inputINT) {
+	int resultINT;
+	resultINT = inputINT + 1;
+	return resultINT;
+}
+
+inline int decrement(int inputINT) {
+	int resultINT;
+	resultINT = inputINT - 1;
+	return resultINT;
+}
+
+inline int moduloTen(int inputINT) {
+	int resultINT;
+	resultINT = inputINT % 10;
+	return resultINT;
+}
+
 //// MAIN PROGRAM EXECUTION
 int main() {
 

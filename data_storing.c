@@ -70,7 +70,7 @@ void storeAccount(FILE* textFilePointer) {
 	scanf("%d", &accAmount);
 	printf(">Allocating dynamic memory for %d accounts...\n", accAmount);
 	if (accAmount <= 0) {
-		printf("\t>Please choose a non-negative number!\n");
+		perror("\t>Please choose a non-negative number!\n");
 		printf("\n");
 		storeAccount(textFilePointer);
 	}
@@ -98,13 +98,13 @@ void freeAllAccounts(FILE* textFilePointer) {
 			}
 		}
 	}
-	
+
 }
 
 void memsetZeros(FILE* textFilePointer) {
 	extern int accAmount;
 	extern PROFILE* accHeapOne;
-	memset(textFilePointer, 0, accAmount*sizeof(accHeapOne));
+	memset(textFilePointer, 0, accAmount * sizeof(accHeapOne));
 }
 
 void clearFileTxt(FILE* txt) {

@@ -16,40 +16,26 @@
 ////-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-////
 //// STRUCTURES
 //
-//// FMTIME STRUCT (Formatted Time)
-typedef struct runtime {
-	int seconds;
-	int minutes;
-}FMTIME;
-
-//// DATE STRUCT
-typedef struct dayInTime {
-	int year;
-	int month;
-	int day;
-}DATE;
-
 //// USER ACCOUNT STRUCT
 typedef struct userData {
+	short userID;
+	int age;
 	char username[30];
 	char password[30];
 	char email[50];
 	char confirmEmail[50];
 	char region[50];
-	char gender;
-	DATE birthday;
 	char userHobby[30];
-	DATE userSince;
-	short userID;
 }PROFILE;
 
 ////-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-////
-//// MENU FUNCTIONS
+//// MENU NAVIGATION 
 void menuMain();
 void checkSelection(int selection);
-
-void clearHistory();
-void backToMenu();
+int queryMainMenu();
+void settingsMenu();
+void memoryMenu();
+void fileMenu();
 
 int confirmAction();
 
@@ -60,30 +46,23 @@ int isPointerValidString(char* charPTR);
 
 ////-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-////
 //// USER ACCOUNT FUNCTIONS
-// 
-// SUBFUNCTIONS
 
-void enterUsername(char* nickname, PROFILE* currentProfile);
-void enterEmail(char* email, char* emailVerif, PROFILE* currentProfile);
-void enterRegion(char* region, PROFILE* currentProfile);
-void enterGender(char oneLetter, PROFILE* currentProfile);
-void enterDate(DATE* chosenDate, PROFILE* currentProfile);
-void enterHobby(char* hobbyPointer, PROFILE* currentProfile);
-
-// MAIN MENU FUNCTIONS
+void displayAccountMenu(int accQuantity);
+void printAccount();
 void chooseAccount();
-void displayAccountMenu();
+int chooseSetting();
+int hidePassword(char* password);
 
 void accountRegistration();
+void enterUsername(int* profileID);
+void enterPassword(int* profileID);
+void enterEmail(int* profileID);
+void enterRegion(int* profileID);
+void enterHobby(int* profileID);
+
+void loginToAccount();
+void logoutOfAccount();
+
 void copyToTxt(PROFILE* currentProfile, FILE* storage);
-
-void accountLogin();
-void accountLogout();
-
-void settingsMenu();
-int chooseSetting();
-
-void refreshPage();
-FMTIME fetchDisplayRuntime();
 
 

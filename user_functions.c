@@ -37,7 +37,7 @@ int confirmAction() {
 
 void checkSelection(int selection) {
 
-	enum startMenu { EXIT, AREG, LOGIN, LOGOUT, DELETE, ADEACT, ACONFIG, MEM_ERASE, T_CLEAR, T_RUNTIME };
+	enum startMenu { EXIT, AREG, LOGIN, LOGOUT, DELETE, SORTSEARCH, ERASE_MENU, FILE_MENU };
 	if (selection == EXIT) {
 		freeAllAccounts(textFilePointer);
 		memsetZeros(textFilePointer);
@@ -51,62 +51,49 @@ void checkSelection(int selection) {
 	else if (selection == LOGIN) {
 		//displayAccountMenu();
 		//chooseAccount();
-		//accountLogin();
+		//loginToAccount();
 	}
 	else if (selection == LOGOUT) {
 		//displayAccountMenu();
 		//chooseAccount();
-		//accountLogout();
+		//logoutOfAccount();
 	}
 	else if (selection == DELETE) {
 		//displayAccountMenu();
 		//chooseAccount();
 		//deleteAccount();
 	}
-	else if (selection == ADEACT) {
-		//displayAccountMenu();
-		//chooseAccount();
-		//deactivateAccount();
+	else if (selection == SORTSEARCH) {
+		
 	}
-	else if (selection == ACONFIG) {
-		//displayAccountMenu();
-		//chooseAccount();
-		//settingsMenu();
-		//chooseSetting();
-		// 
-		//configureName();
-		// ...
+	else if (selection == ERASE_MENU) {
+		
 	}
-	else if (selection == MEM_ERASE) {
-		//freeAllAccounts();
-		//memsetZeros();
-		//clearFileTxt();
+	else if (selection == FILE_MENU) {
+
 	}
-	else if (selection == T_CLEAR) {
-		//refreshPage();
-	}
-	else if (selection == T_RUNTIME) {
-		//fetchRuntime();
-		//displayTotalRuntime();
-	}
+
 }
 
-//// REGISTRATION
+//// ACCOUNT REGISTRATION
 
 void accountRegistration() {
+
+	int accQuantity = 0;
+	printf("How many accounts to register?\n");
+	scanf("%d", &accQuantity);
+
 	printf(">REGISTRATION WINDOW ------------------------------------------------ \n");
 	printf(">Register new User: \n");
-	printf("\t>Username: \n");
 	//void enterUsername();
+	//void enterPassword();
 	printf("\t>E-mail: \n");
 	//void enterEmail();
+	printf("\t>Age:");
+	//void enterAge();
 	printf("\t>Country/Region: \n");
 	//void enterRegion();
-	printf("\t>Gender: \n");
-	//void enterGender();
-	printf("\t>Birthday: \n");
-	//void enterDate();
-	printf("\t>Interests/hobbies: \n");
+	printf("\t>Interests/Hobbies: \n");
 	//void enterHobby();
 	printf(">REGISTRATION WINDOW ------------------------------------------------ \n ");
 }
@@ -116,18 +103,31 @@ void accountRegistration() {
 	char* const email;
 	char* const confirmEmail;
 	char* const region;
-	char gender; //prima jedan znak // F (female), M (male), N (nonbinary), O (other)
-	DATE* birthday;
 	char userHobby[30];
-	DATE* userSince;
 	short userID;
 */
 
-void enterUsername(char* nickname, PROFILE* currentProfile) {
+void enterUsername(int* profileID) {
+	printf(">Enter account username: \n");
 	//scanf("%[^\n]", &nickname);
 }
 
-void enterEmail(char* email, char* emailVerif, PROFILE* currentProfile) {
+void enterPassword(int* profileID) {
+	char* password = { 0 };
+	printf(">Enter password: \n");
+	scanf("%31s", password);
+	hidePassword(password);
+}
+
+int hidePassword(char* password) {
+	int passPos;
+	for (passPos = 0; password[passPos] != '\0'; passPos++) {
+		password[passPos] = '*';
+	}
+	return passPos;
+}
+
+void enterEmail(int* profileID) {
 	/*scanf("%[^\n]", &email);
 	printf("\t>Confirm e-mail: \n");
 	scanf("%[^\n]", &emailVerif);
@@ -142,37 +142,22 @@ void enterEmail(char* email, char* emailVerif, PROFILE* currentProfile) {
 	}*/
 }
 
-void enterRegion(char* region, PROFILE* currentProfile) {
+void enterRegion(int* profileID) {
 
 }
 
-void enterGender(char oneLetter, PROFILE* currentProfile) { //(char oneLetter, PROFILE* currentProfile) {...}
-	scanf(" %c", &oneLetter);
-	if (oneLetter == 'F' || oneLetter == 'M' || oneLetter == 'N' || oneLetter == 'O') {
-		//store to currentProfile
-	}
-	else {
-		printf(">Gender could not be logged. Please choose only one among the options provided.");
-	}
+void enterHobby(int* profileID) {
+
 }
 
-void enterDate(DATE* chosenDate, PROFILE* currentProfile) {
-	scanf("%d", &(chosenDate->day));
-	if (chosenDate->day > 31 || chosenDate->day < 1) {
-		printf(">Invalid day! Please enter again.");
-	}
-	scanf("%d", &(chosenDate->month));
-	if (chosenDate->month > 12 || chosenDate->month < 1) {
-		printf(">Invalid month! Please enter again.");
-	}
-	scanf("%d", &(chosenDate->year));
-	if (chosenDate->year > 2026 || chosenDate->year < 1903) {
-		printf(">Invalid year! Please enter again.");
-	}
-}
-
-void enterHobby(char* hobbyPointer, PROFILE* currentProfile) {
-
+void printAccount() {
+	PROFILE* currentProfile;
+	currentProfile = NULL;
+	printf(">Account ID: %d \n", currentProfile->userID);
+	printf(">Username: %31s \n", currentProfile->username);
+	printf(">Age: %d \n", currentProfile->age);
+	printf(">Region: %51s \n", currentProfile->region);
+	printf(">Hobby: %31s \n", currentProfile->userHobby);
 }
 
 void copyToTxt(PROFILE* currentProfile, FILE* storage) {
@@ -184,12 +169,12 @@ void chooseAccount() {
 
 }
 
-void accountLogin() {
+void loginToAccount() {
 
 }
 
 //// LOG OUT OF ACCOUNT
-void accountLogout() {
+void logoutOfAccount() {
 
 }
 
@@ -199,36 +184,7 @@ void deleteAccount() {
 
 }
 
-//// DEACTIVATION
-
-void deactivateAccount() {
-
-}
-
-//// CLEAR TERMINAL
-void refreshPage() {
-
-}
-
-//// TOTAL VSTUDIO TERMINAL RUNTIME
-FMTIME fetchDisplayRuntime() {
-	FMTIME totalRuntime;
-	//return totalRunTime;
-}
-
-
 //// SORTING & SEARCHING ACCOUNTS
-void searchByUsername(char* username, char* usernameMatch) {
-
-}
-
-void searchByRegion(char* region, char* regionMatch) {
-
-}
-
-void searchByHobby(char* hobby, char* hobbyMatch) {
-
-}
 
 void sortGeneric(int iter, PROFILE* profile) {
 
@@ -250,3 +206,14 @@ void sortByHobby(int iter, PROFILE* profile) {
 
 }
 
+void searchByUsername(char* username, char* usernameMatch) {
+
+}
+
+void searchByRegion(char* region, char* regionMatch) {
+
+}
+
+void searchByHobby(char* hobby, char* hobbyMatch) {
+
+}

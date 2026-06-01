@@ -22,7 +22,6 @@ void closeFileTxt(FILE* textFilePointer);
 //// ACCOUNT CREATE//READ//INSERT//UPDATE//DELETE (CRUD) FUNCTIONS
 void storeAccount(FILE* textFilePointer);
 void deleteAccount();
-void deactivateAccount();
 void freeAllAccounts(FILE* textFilePointer);
 void memsetZeros(FILE* textFilePointer);
 void clearFileTxt(FILE* txt);

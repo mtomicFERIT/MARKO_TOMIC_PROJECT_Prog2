@@ -14,10 +14,11 @@
 #include <corecrt_search.h>
 //#include <corecrt.h>
 
-enum startMenu { EXIT, AREG, LOGIN, LOGOUT, DELETE, ADEACT, ACONFIG, MEM_ERASE, T_CLEAR, T_RUNTIME }OPTIONS;
+enum startMenu { EXIT, AREG, LOGIN, LOGOUT, DELETE, SORTSEARCH, ERASE_MENU, FILE_MENU }OPTIONS;
 
 void menuMain() {
 	int selection = 0;
+
 	printf(">Loading... \n");
 	printf(">MAIN MENU ------------------------------------------------ \n");
 	printf("\n");
@@ -26,11 +27,10 @@ void menuMain() {
 	printf("\t %d - Log into an already existing account \n", LOGIN);
 	printf("\t %d - Log out of your account \n", LOGOUT);
 	printf("\t %d - Delete your account \n", DELETE);
-	printf("\t %d - Deactivate account \n", ADEACT);
-	printf("\t %d - Configure account settings \n", ACONFIG);
-	printf("\t %d - Delete all acounts \n", MEM_ERASE);
-	printf("\t %d - Refresh page \n", T_CLEAR);
-	printf("\t %d - Total time spent on app \n", T_RUNTIME);
+	printf("\t %d - Sort & search profiles \n", SORTSEARCH);
+	//printf("\t %d - Configure account settings \n", ACONFIG);
+	printf("\t %d - Access memory menu \n", ERASE_MENU);
+	printf("\t %d - Access storage text file menu \n", FILE_MENU);
 	printf("\n");
 	printf(">MAIN MENU ------------------------------------------------ \n");
 	printf("\n");
@@ -38,9 +38,9 @@ void menuMain() {
 
 	do {
 		scanf("%d", &selection);
-		if (selection < 0 || selection >= 10) {
+		if (selection < 0 || selection >= 7) {
 			printf(">Selection cannot be decimal or negative!\n");
-			printf(">Selection must be in the range from 0 to 9.\n");
+			printf(">Selection must be in range from 0 to 7.\n");
 			printf(">Please input a new number to select an action: \t");
 		}
 		else if ((isalpha(selection))) {
@@ -48,7 +48,7 @@ void menuMain() {
 			printf(">Exiting program... \t");
 			exit(EXIT_FAILURE);
 		}
-	} while ((selection < 0 || selection >= 10));
+	} while ((selection < 0 || selection >= 7));
 
 	printf("\n>Selection memorised.\n");
 	printf(">Option selected: %d\n", selection);
@@ -57,18 +57,54 @@ void menuMain() {
 
 }
 
-void clearHistory() {
-
+int queryMainMenu() {
+	char queryAnswer = 'a';
+	printf("Would you like to return to the main menu? Type 'Y' for yes.\n");
+	scanf("%c", &queryAnswer);
+	if (queryAnswer == 'Y' || queryAnswer == 'y') {
+		menuMain();
+		return 0;
+	}
+	else {
+		return 1;
+	}
 }
 
-void backToMenu() {
-
+void displayAccountMenu(int accQuantity) {
+	printf("\n");
+	printf("ACCOUNT MENU -------------------------------------");
+	printf("\n");
+	printf(">CURRENTLY AVAILABLE ACCOUNTS: \n");
+	int i;
+	int numAccounts;
+	numAccounts = accQuantity;
+	if (accQuantity <= 0) {
+		printf("There are no accounts to choose from.\n");
+		printf("You must register some accounts first!\n");
+	}
+	for (i = 0; i < accQuantity; i++) {
+		printf("\n");
+		printAccount();
+		printf("Account ID: %d", i + 1);
+	}
+	printf("\n");
+	printf("ACCOUNT MENU -------------------------------------");
 }
 
-void displayAccountMenu() {
+void memoryMenu() {
+	//enum eraseMenu {DEL_ACC, DEL_ALL}OPTIONS_MEM;
+}
 
+void fileMenu() {
+	//enum txtMenu {RENAME, CLEAN}OPTIONS_TXT;
 }
 
 void settingsMenu() {
-
+	//displayAccountMenu();
+	//chooseAccount();
+	//settingsMenu();
+	//chooseSetting();
+	// ...
+	//configureName();
+	// ...
 }
