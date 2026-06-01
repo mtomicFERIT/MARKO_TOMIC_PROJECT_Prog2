@@ -62,23 +62,9 @@ void closeFileTxt(FILE* textFilePointer) {
 }
 
 //// ACCOUNT STORAGE
-void storeAccount(FILE* textFilePointer) {
-	//int i = 0;
-	//int accAmount = 0;
-	//PROFILE* accHeapOne = NULL;
-	printf(">How many accounts would you like to store?\n");
-	scanf("%d", &accAmount);
-	printf(">Allocating dynamic memory for %d accounts...\n", accAmount);
-	if (accAmount <= 0) {
-		perror("\t>Please choose a non-negative number!\n");
-		printf("\n");
-		storeAccount(textFilePointer);
-	}
-	else {
-		for (i = 0; i < accAmount; i++) {
+void storeAccount(PROFILE* accHeapOne) {
+	printf(">Allocating dynamic memory for one account...\n");
 			accHeapOne = (PROFILE*)calloc(1, sizeof(PROFILE));
-		}
-	}
 }
 
 //// MEMORY WIPE (EMPTYING STORAGE AND FREEING UP MEMORY)

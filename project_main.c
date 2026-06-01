@@ -18,6 +18,7 @@
 //#include <corecrt.h>
 
 ////CODE VISIBLE TO ALL FUNCTIONS // GLOBAL VARIABLES & INLINE FUNCTIONS
+PROFILE* activeSession = NULL;
 FILE* textFilePointer = NULL;
 
 inline int increment(int inputINT) {
@@ -48,7 +49,7 @@ int main() {
 	openFileTxt(textFilePointer, "account_storage.txt");
 	checkPointerTxt(textFilePointer);
 	menuMain();
-	confirmAction();
+	queryMainMenu();
 	closeFileTxt(textFilePointer);
 
 	return 0;

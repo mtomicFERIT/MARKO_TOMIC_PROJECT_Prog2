@@ -15,11 +15,12 @@
 
 typedef struct userData PROFILE;
 //// SORTING FUNCTIONS
-void sortGeneric(int iter, PROFILE* profile);
-void sortByAlphabet(int iter, PROFILE* profile);
-void sortByUser(int iter, PROFILE* profile);
-void sortByRegion(int iter, PROFILE* profile);
-void sortByHobby(int iter, PROFILE* profile);
+void genericSort(PROFILE* profileArray, int numAccounts, int (*compareFunc)(PROFILE*, PROFILE*));
+int compareByUsername(PROFILE* firstAcc, PROFILE* secondAcc);
+int compareByAge(PROFILE* firstAcc, PROFILE* secondAcc);
+int compareByRegions(PROFILE* firstAcc, PROFILE* secondAcc);
+int compareByHobbies(PROFILE* firstAcc, PROFILE* secondAcc);
+int compareByID(PROFILE* firstAcc, PROFILE* secondAcc);
 //// SEARCH FUNCTIONS
 void searchByUsername(char* username, char* usernameMatch);
 void searchByRegion(char* region, char* regionMatch);

@@ -38,13 +38,13 @@ void menuMain() {
 
 	do {
 		scanf("%d", &selection);
-		if (selection < 0 || selection >= 7) {
+		if (selection < 0 || selection >= 7) {		//if (scanf("%d", &selection) != 1)
 			printf(">Selection cannot be decimal or negative!\n");
 			printf(">Selection must be in range from 0 to 7.\n");
 			printf(">Please input a new number to select an action: \t");
 		}
-		else if ((isalpha(selection))) {
-			printf(">Please enter a number!\n");
+		else if ((isalpha(selection))) {			
+			printf(">Please enter a number!\n");	//SWITCH AROUND THE IF STATEMENTS' ORDER
 			printf(">Exiting program... \t");
 			exit(EXIT_FAILURE);
 		}
@@ -58,9 +58,9 @@ void menuMain() {
 }
 
 int queryMainMenu() {
-	char queryAnswer = 'a';
+	char queryAnswer = '0';
 	printf("Would you like to return to the main menu? Type 'Y' for yes.\n");
-	scanf("%c", &queryAnswer);
+	scanf(" %c", &queryAnswer);
 	if (queryAnswer == 'Y' || queryAnswer == 'y') {
 		menuMain();
 		return 0;

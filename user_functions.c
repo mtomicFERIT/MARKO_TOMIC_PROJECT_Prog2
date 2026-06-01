@@ -102,6 +102,7 @@ void accountRegistration() {
 
 		regProfile->userID = regIter;
 		printf("\n");
+		storeAccount(regProfile); // +. copyToTxt(regProfile);
 		
 		printf(">Registering User %d (System ID: %d) \n\n", regIter + 1, regProfile->userID);
 
@@ -114,9 +115,8 @@ void accountRegistration() {
 
 		printAccount(regProfile);
 		printf("\n>User successfully registered!\n");
-		memset(regProfile, 0, sizeof(regProfile));
-		//return &profileDatabase[regIter];
 	}
+	//queryMainMenu;
 }
 /*
 	int userID;
@@ -338,7 +338,6 @@ void printAccount(PROFILE* currentProfile) {
 }
 
 void copyToTxt(PROFILE* currentProfile, FILE* storage) {
-
 	isPointerValidProfile(currentProfile);
 	if (storage == NULL) {
 		perror("\nStorage file pointer pointed at null!\n");
@@ -355,7 +354,7 @@ void copyToTxt(PROFILE* currentProfile, FILE* storage) {
 
 //// LOG INTO ACCOUNT // LOG OUT OF ACCOUNT // ACCOUNT SELECT
 PROFILE* chooseAccount(PROFILE* profileArray, int numAccounts) {
-	PROFILE* chosenAccount = NULL;
+	PROFILE* selectedAccount = NULL;
 	int i;
 	int chosenAccID = 0;
 
@@ -377,11 +376,11 @@ PROFILE* chooseAccount(PROFILE* profileArray, int numAccounts) {
 		
 		for (i = 0; i <= numAccounts; i++) {
 			if (profileArray[i].userID == chosenAccID) {
-				chosenAccount = &profileArray[i];
-				printf("\n>Profile with ID %d found and selected.\n", chosenAccount->userID);
-				printAccount(chosenAccount);
+				selectedAccount = &profileArray[i];
+				printf("\n>Profile with ID %d found and selected.\n", selectedAccount->userID);
+				printAccount(selectedAccount);
 
-				return chosenAccount;
+				return selectedAccount;
 			}
 		}
 
@@ -389,40 +388,118 @@ PROFILE* chooseAccount(PROFILE* profileArray, int numAccounts) {
 	}
 }
 
-void loginToAccount() {
+PROFILE* loginToAccount(PROFILE* profileArray, int numAccounts) {
+	
+	PROFILE* selectedAccount = chooseAccount(profileArray, numAccounts);
+	if (selectedAccount == NULL) {
+		printf(">Login failed! No account selected.\n");
+		return NULL;
+	}
 
+	char inputPassword[30] = { 0 };
+	int attempts = 3;
+
+	while (attempts > 0) {
+		printf("\n>Enter password for user %s: \n", selectedAccount->username);
+		scanf("%29s", inputPassword);
+
+		if (strcmp(selectedAccount->password, inputPassword) == 0) {
+			printf("\n>>> Login successful! Welcome back, %s. <<<\n", selectedAccount->username);
+			return selectedAccount; 
+		}
+		else {
+			attempts--;
+			printf(">Incorrect password! Attempts remaining: %d\n", attempts);
+		}
+	}
+
+	printf(">Too many incorrect attempts. Login blocked for this session.\n");
+	return NULL;
 }
 
-void logoutOfAccount() {
+PROFILE* logoutOfAccount(PROFILE* activeSession) {
+	if (activeSession == NULL) {
+		printf(">Error: No user is currently logged in.\n");
+		return NULL;
+	}
 
+	printf("\n>>> User %s has been successfully logged out. <<<\n", activeSession->username);
+
+	// Vraćamo NULL kako bismo poništili aktivnu sesiju
+	return NULL;
 }
 
-//// ACCOUNT DELETION
+//// ACCOUNT DELETION (FINDING INDEX, MOVING ACCOUNTS, DECREASING CURRENT AMOUNT)
 
-void deleteAccount() {
+void deleteAccount(PROFILE* profileArray, int* numAccounts, int targetID, PROFILE** activeSession) {
+	int i, j;
+	int foundIndex = -1;
 
+	for (i = 0; i < *numAccounts; i++) {
+		if (profileArray[i].userID == targetID) {
+			foundIndex = i;
+			break;
+		}
+	}
+	if (foundIndex == -1) {
+		printf(">Error: Account with ID %d not found.\n", targetID);
+		return;
+	}
+
+	if (*activeSession != NULL && *activeSession == &profileArray[foundIndex]) {
+		printf(">Notice: Deleting the currently active account. Logging out...\n");
+		*activeSession = NULL;
+	}
+
+	for (j = foundIndex; j < *numAccounts - 1; j++) {
+		profileArray[j] = profileArray[j + 1];
+	}
+	memset(&profileArray[*numAccounts - 1], 0, sizeof(PROFILE));
+	(*numAccounts)--;
+	printf(">Account with ID %d has been successfully deleted.\n", targetID);
 }
 
 //// SORTING & SEARCHING ACCOUNTS
+//
+// GENERIC PROFILE SORTING (BUBBLE SORT)
 
-void sortGeneric(int iter, PROFILE* profile) {
+void genericSort(PROFILE* profileArray, int numAccounts, int (*compareFunc)(PROFILE*, PROFILE*)) {
+	int i, j;
+	PROFILE temp;
 
+	for (i = 0; i < numAccounts - 1; i++) {
+		for (j = 0; j < numAccounts - i - 1; j++) {
+
+			if (compareFunc(&profileArray[j], &profileArray[j + 1])) {
+
+				temp = profileArray[j];
+				profileArray[j] = profileArray[j + 1];
+				profileArray[j + 1] = temp;
+
+			}
+		}
+	}
+	printf(">Array successfully sorted using the selected criteria.\n");
 }
 
-void sortByAlphabet(int iter, PROFILE* profile) {
-
+int compareByID(PROFILE* firstAcc, PROFILE* secondAcc) {
+	return firstAcc->userID > secondAcc->userID;
 }
 
-void sortByUser(int iter, PROFILE* profile) {
-
+int compareByAge(PROFILE* firstAcc, PROFILE* secondAcc) {
+	return firstAcc->age > secondAcc->age;
 }
 
-void sortByRegion(int iter, PROFILE* profile) {
-
+int compareByUsername(PROFILE* firstAcc, PROFILE* secondAcc) {
+	return strcmp(firstAcc->username, secondAcc->username) > 0;
 }
 
-void sortByHobby(int iter, PROFILE* profile) {
+int compareByRegions(PROFILE* firstAcc, PROFILE* secondAcc) {
+	return strcmp(firstAcc->region, secondAcc->region) > 0;
+}
 
+int compareByHobbies(PROFILE* firstAcc, PROFILE* secondAcc) {
+	return strcmp(firstAcc->userHobby, secondAcc->userHobby) > 0;
 }
 
 void searchByUsername(char* username, char* usernameMatch) {

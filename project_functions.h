@@ -59,9 +59,7 @@ void enterAge(PROFILE* profilePTR);
 void enterRegion(PROFILE* profilePTR);
 void enterHobby(PROFILE* profilePTR);
 
-void loginToAccount();
-void logoutOfAccount();
-
-void copyToTxt(PROFILE* currentProfile, FILE* storage);
+PROFILE* loginToAccount(PROFILE* profileArray, int numAccounts);
+PROFILE* logoutOfAccount(PROFILE* activeSession);
 
 
