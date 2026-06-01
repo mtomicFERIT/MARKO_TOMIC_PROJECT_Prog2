@@ -23,7 +23,6 @@ typedef struct userData {
 	char username[30];
 	char password[30];
 	char email[50];
-	char confirmEmail[50];
 	char region[50];
 	char userHobby[30];
 }PROFILE;
@@ -51,14 +50,15 @@ void displayAccountMenu(int accQuantity);
 void printAccount();
 void chooseAccount();
 int chooseSetting();
-int hidePassword(char* password);
+void hidePassword(char* password);
 
 void accountRegistration();
-void enterUsername(int* profileID);
-void enterPassword(int* profileID);
-void enterEmail(int* profileID);
-void enterRegion(int* profileID);
-void enterHobby(int* profileID);
+void enterUsername(PROFILE* profilePTR);
+void enterPassword(PROFILE* profilePTR);
+void enterEmail(PROFILE* profilePTR);
+void enterAge(PROFILE* profilePTR);
+void enterRegion(PROFILE* profilePTR);
+void enterHobby(PROFILE* profilePTR);
 
 void loginToAccount();
 void logoutOfAccount();

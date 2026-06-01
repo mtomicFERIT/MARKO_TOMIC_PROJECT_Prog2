@@ -78,90 +78,179 @@ void checkSelection(int selection) {
 //// ACCOUNT REGISTRATION
 
 void accountRegistration() {
-
+	int regIter = 0;
 	int accQuantity = 0;
 	printf("How many accounts to register?\n");
 	scanf("%d", &accQuantity);
 
-	printf(">REGISTRATION WINDOW ------------------------------------------------ \n");
-	printf(">Register new User: \n");
-	//void enterUsername();
-	//void enterPassword();
-	printf("\t>E-mail: \n");
-	//void enterEmail();
-	printf("\t>Age:");
-	//void enterAge();
-	printf("\t>Country/Region: \n");
-	//void enterRegion();
-	printf("\t>Interests/Hobbies: \n");
-	//void enterHobby();
-	printf(">REGISTRATION WINDOW ------------------------------------------------ \n ");
+	for (regIter = 0; regIter < accQuantity; regIter++) {
+		printf("\n");
+		printf(">REGISTRATION WINDOW ------------------------------------------------ \n");
+		printf(">Register new User: \n");
+		//void enterUsername();
+		//void enterPassword();
+		//void enterEmail();
+		printf("\t>Age:\n");
+		//void enterAge();
+		printf("\t>Country/Region: \n");
+		//void enterRegion();
+		printf("\t>Interests/Hobbies: \n");
+		//void enterHobby();
+		printf(">REGISTRATION WINDOW ------------------------------------------------ \n ");
+	}
+
 }
 /*
-	char username[24];
-	char* const password;
-	char* const email;
-	char* const confirmEmail;
-	char* const region;
-	char userHobby[30];
 	short userID;
+	int age;
+	char username[30];
+	char password[30];
+	char email[50];
+	char region[50];
+	char userHobby[30];
 */
 
-void enterUsername(int* profileID) {
-	printf(">Enter account username: \n");
-	//scanf("%[^\n]", &nickname);
-}
+void enterUsername(PROFILE* profilePTR) {
+	char username[30] = { 0 };
+	char* usernamePTR = username;
 
-void enterPassword(int* profileID) {
-	char* password = { 0 };
-	printf(">Enter password: \n");
-	scanf("%31s", password);
-	hidePassword(password);
-}
-
-int hidePassword(char* password) {
-	int passPos;
-	for (passPos = 0; password[passPos] != '\0'; passPos++) {
-		password[passPos] = '*';
-	}
-	return passPos;
-}
-
-void enterEmail(int* profileID) {
-	/*scanf("%[^\n]", &email);
-	printf("\t>Confirm e-mail: \n");
-	scanf("%[^\n]", &emailVerif);
-	do {
-		enterEmail(email, emailVerif);
-		if (emailVerif != email) {
-			printf("\t\t>Could not verify e-mail! Please try again.");
+	while (1) {
+		printf(">Enter account username: \n");
+		scanf("%29s", usernamePTR);
+		if (isdigit(username[0]) == 0 && ispunct(username[0]) == 0) {
+			strcpy(profilePTR->username, username);
+			break;
 		}
-	} while (emailVerif != email);
-	if (emailVerif == email) {
-		printf("\t\t>E-mail verification successful.");
-	}*/
+		else {
+			printf(">The first symbol of a username cannot be a digit or interpunction!\n");
+		}
+	}
 }
 
-void enterRegion(int* profileID) {
+void hidePassword(char* passwordPTR) {
+	int passPos;
+	char hiddenPassword[30] = { 0 };
+
+	for (passPos = 0; passwordPTR[passPos] != '\0'; passPos++) {
+		hiddenPassword[passPos] = '*';
+	}
+	hiddenPassword[passPos] = '\0';
+
+	printf("Your password is %d digits long.\n", passPos);
+	printf("%31s\n", hiddenPassword);
+}
+
+void enterPassword(PROFILE* profilePTR) {
+	char password[30] = { 0 };
+	char* passwordPTR = password;
+
+	char passVerif[30] = { 0 };
+	char* passVerifPTR = passVerif;
+
+	while (1) {
+		printf(">Enter password: \n");
+		scanf("%29s", passwordPTR);
+		hidePassword(passwordPTR);
+
+		printf(">Enter password again for verification: \n");
+		scanf("%29s", passVerifPTR);
+		hidePassword(passVerifPTR);
+
+		if (strcmp(password, passVerif) == 0) {
+			printf(">Password verified!");
+			strcpy(profilePTR->password, password);
+			break;
+		}
+		else {
+			printf(">Passwords not matching!\n Please enter your password again.\n");
+
+			memset(password, 0, sizeof(password));
+			memset(passVerif, 0, sizeof(passVerif));
+		}
+	}
+}
+
+void enterEmail(PROFILE* profilePTR) {
+	int emIter;
+	int flagDot = 0;
+	int flagMonkey = 0;
+	char email[50] = { 0 };
+	char* emailPTR = email;
+
+	while (1) {
+
+		printf(">Enter e-mail: \n");
+		scanf("%49s", emailPTR);
+		printf("\n");
+		printf(">Validating e-mail...\n");
+
+		for (emIter = 0; email[emIter] != '\0'; emIter++) {
+			if (email[emIter] == '@') {
+				printf("\t>Monkey (@) detected at index %d.\n", emIter + 1);
+				flagMonkey = 1;
+				break;
+			}
+		}
+		if (flagMonkey == 1) {
+			for (/*emIter = 0*/; email[emIter] != '\0'; emIter++) {
+				if (email[emIter] == '.') {
+					flagDot = 1;
+					printf(">Dot detected at index %d.\n", emIter + 1);
+					break;
+				}
+			}
+		}
+
+		if (flagMonkey == 1 && flagDot == 1) {
+			printf(">E-mail is valid! \n");
+			strcpy(profilePTR->email, email);
+			break;
+		}
+		else {
+			if (flagMonkey == 0) {
+				printf("\t>Your e-mail address is missing a monkey sign (@)!\n");
+			}
+			if (flagDot == 0) {
+				printf("\t>Your e-mail adress must feature at least one dot!\n");
+			}
+			printf(">Please enter your e-mail address again.\n\n");
+
+			flagMonkey = 0;
+			flagDot = 0;
+			memset(email, 0, sizeof(email));
+		}
+	}
+}
+
+void enterAge(PROFILE* profilePTR) {
 
 }
 
-void enterHobby(int* profileID) {
+void enterRegion(PROFILE* profilePTR) {
+
+}
+
+void enterHobby(PROFILE* profilePTR) {
 
 }
 
 void printAccount() {
 	PROFILE* currentProfile;
 	currentProfile = NULL;
-	printf(">Account ID: %d \n", currentProfile->userID);
-	printf(">Username: %31s \n", currentProfile->username);
-	printf(">Age: %d \n", currentProfile->age);
-	printf(">Region: %51s \n", currentProfile->region);
-	printf(">Hobby: %31s \n", currentProfile->userHobby);
+	printf("Username: %31s \n", currentProfile->username);
+	printf("Region: %51s \n", currentProfile->region);
+	printf("Hobby: %31s \n", currentProfile->userHobby);
+	printf("Age: %d \n", currentProfile->age);
+	printf("Account ID: %d \n", currentProfile->userID);
 }
 
 void copyToTxt(PROFILE* currentProfile, FILE* storage) {
-
+	fprintf(storage, "\n");
+	fprintf(storage, "Username: %31s \n", currentProfile->username);
+	fprintf(storage, "Region: %51s \n", currentProfile->region);
+	fprintf(storage, "Hobby: %31s \n", currentProfile->userHobby);
+	fprintf(storage, "Age: %d \n", currentProfile->age);
+	fprintf(storage, "Account ID: %d \n", currentProfile->userID);
 }
 
 //// LOG INTO ACCOUNT
