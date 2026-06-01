@@ -21,9 +21,9 @@ void openFileTxt(FILE* textFilePointer, const char* fileName) {
 
 //// POINTER CHECKUP // FAIL-SAFE
 // FILE
-int checkPointer(FILE* textFilePointer) {
+int checkPointerTxt(FILE* textFilePointer) {
 	if (textFilePointer == NULL) {
-		perror("Could not find the wanted text file.");
+		printf(">Could not find the wanted text file!");
 		return EXIT_FAILURE;
 	}
 	else {
@@ -33,7 +33,7 @@ int checkPointer(FILE* textFilePointer) {
 // PROFILE
 int isPointerValidProfile(PROFILE* profilePTR) {
 	if (profilePTR == NULL) {
-		perror("Could not find the wanted account.");
+		perror("Could not find the wanted account!");
 		return EXIT_FAILURE;
 	}
 	else {
@@ -87,7 +87,7 @@ void freeAllAccounts(FILE* textFilePointer) {
 	extern int accAmount;
 	extern PROFILE* accHeapOne;
 	if (accHeapOne == NULL || accAmount <= 0) {
-		printf(">Error: Could not find memory to free!");
+		printf(">Could not find memory to free!");
 		printf("\n");
 	}
 	else {

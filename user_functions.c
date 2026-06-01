@@ -13,7 +13,9 @@
 #include <time.h>
 #include <corecrt_search.h>
 //#include <corecrt.h>
-
+//-----------------------------//
+#define MAX_P 32
+//-----------------------------//
 extern FILE* textFilePointer;
 
 int confirmAction() {
@@ -78,30 +80,46 @@ void checkSelection(int selection) {
 //// ACCOUNT REGISTRATION
 
 void accountRegistration() {
+	PROFILE profileDatabase[MAX_P] = { 0 };
+	PROFILE* regProfile = NULL;
 	int regIter = 0;
 	int accQuantity = 0;
+
 	printf("How many accounts to register?\n");
-	scanf("%d", &accQuantity);
-
-	for (regIter = 0; regIter < accQuantity; regIter++) {
-		printf("\n");
-		printf(">REGISTRATION WINDOW ------------------------------------------------ \n");
-		printf(">Register new User: \n");
-		//void enterUsername();
-		//void enterPassword();
-		//void enterEmail();
-		printf("\t>Age:\n");
-		//void enterAge();
-		printf("\t>Country/Region: \n");
-		//void enterRegion();
-		printf("\t>Interests/Hobbies: \n");
-		//void enterHobby();
-		printf(">REGISTRATION WINDOW ------------------------------------------------ \n ");
+	//scanf("%d", &accQuantity);
+	if (scanf("%d", &accQuantity) != 1) {
+		printf(">Invalid input! Returning...\n\n");
+		while (getchar() != '\n');
+		accountRegistration();
 	}
+	if (accQuantity > MAX_P) {
+		printf(">System capacity is %d accounts. Adjusting to the maximum amount.\n\n", MAX_P);
+		accQuantity = MAX_P;
+		accountRegistration();
+	}
+	for (regIter = 0; regIter < accQuantity; regIter++) {
+		regProfile = &profileDatabase[regIter];
 
+		regProfile->userID = regIter;
+		printf("\n");
+		
+		printf(">Registering User %d (System ID: %d) \n\n", regIter + 1, regProfile->userID);
+
+		enterUsername(regProfile);
+		enterPassword(regProfile);
+		enterEmail(regProfile);
+		enterAge(regProfile);
+		enterRegion(regProfile);
+		enterHobby(regProfile);
+
+		printAccount(regProfile);
+		printf("\n>User successfully registered!\n");
+		memset(regProfile, 0, sizeof(regProfile));
+		//return &profileDatabase[regIter];
+	}
 }
 /*
-	short userID;
+	int userID;
 	int age;
 	char username[30];
 	char password[30];
@@ -137,7 +155,7 @@ void hidePassword(char* passwordPTR) {
 	hiddenPassword[passPos] = '\0';
 
 	printf("Your password is %d digits long.\n", passPos);
-	printf("%31s\n", hiddenPassword);
+	printf("%s\n", hiddenPassword);
 }
 
 void enterPassword(PROFILE* profilePTR) {
@@ -178,7 +196,7 @@ void enterEmail(PROFILE* profilePTR) {
 	char* emailPTR = email;
 
 	while (1) {
-
+		printf("\n");
 		printf(">Enter e-mail: \n");
 		scanf("%49s", emailPTR);
 		printf("\n");
@@ -195,17 +213,17 @@ void enterEmail(PROFILE* profilePTR) {
 			for (/*emIter = 0*/; email[emIter] != '\0'; emIter++) {
 				if (email[emIter] == '.') {
 					flagDot = 1;
-					printf(">Dot detected at index %d.\n", emIter + 1);
+					printf("\t>Dot detected at index %d.\n", emIter + 1);
 					break;
 				}
 			}
 		}
-
 		if (flagMonkey == 1 && flagDot == 1) {
 			printf(">E-mail is valid! \n");
 			strcpy(profilePTR->email, email);
 			break;
 		}
+
 		else {
 			if (flagMonkey == 0) {
 				printf("\t>Your e-mail address is missing a monkey sign (@)!\n");
@@ -214,7 +232,6 @@ void enterEmail(PROFILE* profilePTR) {
 				printf("\t>Your e-mail adress must feature at least one dot!\n");
 			}
 			printf(">Please enter your e-mail address again.\n\n");
-
 			flagMonkey = 0;
 			flagDot = 0;
 			memset(email, 0, sizeof(email));
@@ -223,51 +240,164 @@ void enterEmail(PROFILE* profilePTR) {
 }
 
 void enterAge(PROFILE* profilePTR) {
+	int userAge = 0;
 
+	while (1) {
+		printf(">Enter your age: \n");
+		//scanf("%d", &userAge);
+
+		if (scanf("%d", &userAge) != 1) {
+			printf(">Please enter a number! \n");
+			while (getchar() != '\n');
+			continue;
+		}
+
+		if (userAge <= 12 || userAge > 122) {
+			printf(">Please enter a credible age. \n");
+			userAge = 0;
+		}
+		else {
+			profilePTR->age = userAge;
+			printf(">Age has been retrieved. \n");
+			break;
+		}
+	}
 }
 
 void enterRegion(PROFILE* profilePTR) {
+	int iter;
+	char userRegion[50] = { 0 };
+	char* regionPTR = userRegion;
+	int flagNotAllowed = 0;
 
+	while (1) {
+		printf(">Region/Country: \n");
+		scanf("%49s", regionPTR);
+		flagNotAllowed = 0;
+
+		for (iter = 0; userRegion[iter] != '\0'; iter++) {
+			if (ispunct(userRegion[iter]) || isdigit(userRegion[iter])) {
+				flagNotAllowed = 1;
+				break;
+			}
+		}
+
+		if (flagNotAllowed == 0) {
+			strcpy(profilePTR->region, userRegion);
+			break;
+		}
+		else {
+			printf(">Please use characters only!\n");
+			memset(userRegion, 0, sizeof(userRegion));
+		}
+	}
 }
 
 void enterHobby(PROFILE* profilePTR) {
+	int i;
+	char hobby[30] = { 0 };
+	char* hobbyPTR = hobby;
+	int flagNotAllowed = 0;
 
+	while (1) {
+		printf(">Hobby: \n");
+		scanf("%29s", hobbyPTR);
+		flagNotAllowed = 0;
+
+		for (i = 0; hobby[i] != '\0'; i++) {
+			if (ispunct(hobby[i]) || isdigit(hobby[i])) {
+				flagNotAllowed = 1;
+				break;
+			}
+		}
+
+		if (flagNotAllowed == 0) {
+			strcpy(profilePTR->userHobby, hobby);
+			break;
+		}
+		else {
+			printf(">Please use characters only!\n");
+			memset(hobby, 0, sizeof(hobby));
+		}
+	}
 }
 
-void printAccount() {
-	PROFILE* currentProfile;
-	currentProfile = NULL;
-	printf("Username: %31s \n", currentProfile->username);
-	printf("Region: %51s \n", currentProfile->region);
-	printf("Hobby: %31s \n", currentProfile->userHobby);
-	printf("Age: %d \n", currentProfile->age);
-	printf("Account ID: %d \n", currentProfile->userID);
+void printAccount(PROFILE* currentProfile) {
+	isPointerValidProfile(currentProfile);
+
+	printf("\n");
+	printf("+====================================================================+\n");
+	printf("| PROFILE #%d", currentProfile->userID);
+	printf("| \n");
+	printf("| Username: %s \n", currentProfile->username);
+	printf("| Region: %s \n", currentProfile->region);
+	printf("| Hobby: %s \n", currentProfile->userHobby);
+	printf("| Age: %d \n", currentProfile->age);
+	printf("| \n");
+	printf("+====================================================================+\n");
 }
 
 void copyToTxt(PROFILE* currentProfile, FILE* storage) {
+
+	isPointerValidProfile(currentProfile);
+	if (storage == NULL) {
+		perror("\nStorage file pointer pointed at null!\n");
+		printf(">Storage not accessible.");
+	}
+
 	fprintf(storage, "\n");
-	fprintf(storage, "Username: %31s \n", currentProfile->username);
-	fprintf(storage, "Region: %51s \n", currentProfile->region);
-	fprintf(storage, "Hobby: %31s \n", currentProfile->userHobby);
+	fprintf(storage, "Username: %s \n", currentProfile->username);
+	fprintf(storage, "Region: %s \n", currentProfile->region);
+	fprintf(storage, "Hobby: %s \n", currentProfile->userHobby);
 	fprintf(storage, "Age: %d \n", currentProfile->age);
 	fprintf(storage, "Account ID: %d \n", currentProfile->userID);
 }
 
-//// LOG INTO ACCOUNT
-void chooseAccount() {
+//// LOG INTO ACCOUNT // LOG OUT OF ACCOUNT // ACCOUNT SELECT
+PROFILE* chooseAccount(PROFILE* profileArray, int numAccounts) {
+	PROFILE* chosenAccount = NULL;
+	int i;
+	int chosenAccID = 0;
 
+	if (numAccounts == 0) {
+		printf(">There are no available accounts to choose from!\n\n");
+		return NULL;
+	}
+
+	while (1) {
+		displayAccountMenu(profileArray, numAccounts);
+		printf(">Insert the ID of the profile you wish to select: \n");
+		scanf("%d", &chosenAccID);
+
+		if (scanf("%d", &chosenAccID) != 1) {
+			printf(">Error: Invalid input! Please enter a number.\n\n");
+			while (getchar() != '\n');
+			continue;
+		}
+		
+		for (i = 0; i <= numAccounts; i++) {
+			if (profileArray[i].userID == chosenAccID) {
+				chosenAccount = &profileArray[i];
+				printf("\n>Profile with ID %d found and selected.\n", chosenAccount->userID);
+				printAccount(chosenAccount);
+
+				return chosenAccount;
+			}
+		}
+
+		printf(">Error: Profile with ID %d does not exist! Please try again.\n\n", chosenAccID);
+	}
 }
 
 void loginToAccount() {
 
 }
 
-//// LOG OUT OF ACCOUNT
 void logoutOfAccount() {
 
 }
 
-//// DELETION
+//// ACCOUNT DELETION
 
 void deleteAccount() {
 

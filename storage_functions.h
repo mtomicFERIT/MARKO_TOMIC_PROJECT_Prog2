@@ -17,7 +17,7 @@ typedef struct userData PROFILE;
 ////-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-////
 //// TEXT FILE (.txt)
 void openFileTxt(FILE* textFilePointer, const char* fileName);
-int checkFileTxt(FILE* txt);
+int checkPointerTxt(FILE* textFilePointer);
 void closeFileTxt(FILE* textFilePointer);
 //// ACCOUNT CREATE//READ//INSERT//UPDATE//DELETE (CRUD) FUNCTIONS
 void storeAccount(FILE* textFilePointer);

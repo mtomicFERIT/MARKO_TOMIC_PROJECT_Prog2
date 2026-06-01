@@ -70,22 +70,23 @@ int queryMainMenu() {
 	}
 }
 
-void displayAccountMenu(int accQuantity) {
+void displayAccountMenu(PROFILE* profileArray, int numAccounts) {
+	int di;
+	int flagLastProfile = 0;
 	printf("\n");
 	printf("ACCOUNT MENU -------------------------------------");
 	printf("\n");
 	printf(">CURRENTLY AVAILABLE ACCOUNTS: \n");
-	int i;
-	int numAccounts;
-	numAccounts = accQuantity;
-	if (accQuantity <= 0) {
-		printf("There are no accounts to choose from.\n");
-		printf("You must register some accounts first!\n");
+	if (numAccounts <= 0) {
+		printf(">There are no accounts to choose from.\n");
+		printf(">You must register some accounts first!\n");
 	}
-	for (i = 0; i < accQuantity; i++) {
-		printf("\n");
-		printAccount();
-		printf("Account ID: %d", i + 1);
+	else {
+		for (di = 0; di < numAccounts; di++) {
+			//printf("[%d]. ", i + 1);
+			printAccount(&profileArray[di]);
+		}
+		printf("ACCOUNT MENU -------------------------------------");
 	}
 	printf("\n");
 	printf("ACCOUNT MENU -------------------------------------");

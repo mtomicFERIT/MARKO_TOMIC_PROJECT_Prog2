@@ -46,7 +46,7 @@ int main() {
 	textFilePointer = fopen(fileName, "w+");
 
 	openFileTxt(textFilePointer, "account_storage.txt");
-	extern checkFileTxt(textFilePointer);
+	checkPointerTxt(textFilePointer);
 	menuMain();
 	confirmAction();
 	closeFileTxt(textFilePointer);

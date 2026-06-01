@@ -18,7 +18,7 @@
 //
 //// USER ACCOUNT STRUCT
 typedef struct userData {
-	short userID;
+	int userID;
 	int age;
 	char username[30];
 	char password[30];
@@ -45,10 +45,9 @@ int isPointerValidString(char* charPTR);
 
 ////-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-////
 //// USER ACCOUNT FUNCTIONS
-
-void displayAccountMenu(int accQuantity);
-void printAccount();
-void chooseAccount();
+void printAccount(PROFILE* currentProfile);
+void displayAccountMenu(PROFILE* profileArray, int numAccounts);
+PROFILE* chooseAccount(PROFILE* profileArray, int numAccounts);
 int chooseSetting();
 void hidePassword(char* password);
 
