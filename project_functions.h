@@ -35,9 +35,7 @@ typedef struct userData {
 void menuMain();
 void checkSelection(int selection, PROFILE* pArrayPTR, int numProfiles);
 int queryMainMenu();
-void settingsMenu();
-void memoryMenu();
-void fileMenu();
+void fileMenu(FILE* txt, const char* oldFilename);
 
 int confirmAction();
 
@@ -51,7 +49,7 @@ int isPointerValidString(char* charPTR);
 void printAccount(PROFILE* currentProfile);
 void displayAccountMenu(PROFILE* profileArray, int numAccounts);
 PROFILE* chooseAccount(PROFILE* profileArray, int numAccounts);
-int chooseSetting();
+int alterSetting(PROFILE* currentProfile);
 void hidePassword(char* password);
 
 void accountRegistration();

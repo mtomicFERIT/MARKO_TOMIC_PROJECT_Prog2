@@ -22,13 +22,14 @@ typedef struct userData PROFILE;
 void openFileTxt(FILE* textFilePointer, const char* fileName);
 int checkPointerTxt(FILE* textFilePointer);
 void closeFileTxt(FILE* textFilePointer);
+FILE* renameFileTxt(FILE* txt, const char* oldName);
+FILE* clearFileTxt(FILE* txt);
 //// ACCOUNT CREATE//READ//INSERT//UPDATE//DELETE (CRUD) FUNCTIONS
 void storeAccount(PROFILE* accHeapOne);
-void copyToTxt(PROFILE* currentProfile, FILE* storage);
-void deleteAccount(PROFILE* profileArray, int* numAccounts, int targetID, PROFILE** activeSession);
+void copyToTxt(const PROFILE* currentProfile, FILE* storage);
+void deleteAccount(PROFILE* profileArray, int* numAccounts, int targetID, PROFILE** activeDelSession);
 void freeAllAccounts(FILE* textFilePointer);
 void memsetZeros(FILE* textFilePointer);
-void clearFileTxt(FILE* txt);
 //// ACCOUNT SETTINGS CONFIGURATION
 void changeUsername(PROFILE* user_account);
 

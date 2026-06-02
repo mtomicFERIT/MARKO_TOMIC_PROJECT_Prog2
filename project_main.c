@@ -26,6 +26,8 @@ PROFILE* activeSession = NULL;
 FILE* textFilePointer = NULL;
 PROFILE profileArray[MAX_P] = { 0 };
 PROFILE* pArrayPTR = profileArray;
+extern PROFILE* targetAccount;
+extern PROFILE** activeDelSession;
 
 inline int increment(int inputINT) {
 	int resultINT;

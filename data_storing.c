@@ -12,7 +12,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <corecrt_search.h>
-//#include <corecrt.h>
+#include <io.h>
 //// GLOBAL VARIABLES & INLINE FUNCTIONS
 // MACROS
 #define MAX_P 32
@@ -22,6 +22,8 @@ extern PROFILE* activeSession;
 extern FILE* textFilePointer;
 extern PROFILE profileArray[32];
 extern PROFILE* pArrayPTR;
+PROFILE* targetAccount;
+extern PROFILE** activeDelSession;
 
 //// OPENING FILE
 void openFileTxt(FILE* textFilePointer, const char* fileName) {
@@ -72,12 +74,20 @@ void closeFileTxt(FILE* textFilePointer) {
 
 //// ACCOUNT STORAGE
 void storeAccount(PROFILE* accHeapOne) {
+	if (accHeapOne == NULL) {
+		fprintf(stderr, ">Error: Could not find an account to store!\n Pointer is NULL!\n\n");
+	}
+
 	printf(">Allocating dynamic memory for one account...\n");
-			accHeapOne = (PROFILE*)calloc(1, sizeof(PROFILE));
+	accHeapOne = (PROFILE*)calloc(1, sizeof(PROFILE));
+	if (accHeapOne != NULL) {
+		printf(">Memory allocated successfully!\n");
+	}
 }
 
 //// MEMORY WIPE (EMPTYING STORAGE AND FREEING UP MEMORY)
 void freeAllAccounts(FILE* textFilePointer) {
+	checkPointerTxt(textFilePointer);
 	int i;
 	extern int accAmount;
 	extern PROFILE* accHeapOne;
@@ -102,6 +112,54 @@ void memsetZeros(FILE* textFilePointer) {
 	memset(textFilePointer, 0, accAmount * sizeof(accHeapOne));
 }
 
-void clearFileTxt(FILE* txt) {
+FILE* renameFileTxt(FILE* txt, const char* oldFilename) {
+	char newFilename[256];
+
+	printf("Enter the new filename (include .txt): ");
+	if (scanf("%255s", newFilename) != 1) {
+		printf(">Error reading new filename.\n");
+		return txt;
+	}
+
+	if (txt != NULL) {
+		fclose(txt);
+	}
+
+	if (rename(oldFilename, newFilename) == 0) {
+		printf(">File successfully renamed to '%s'.\n", newFilename);
+
+		FILE* newTxt = fopen(newFilename, "a+");
+		if (newTxt == NULL) {
+			perror("Error reopening renamed file!\n");
+		}
+		return newTxt;
+	}
+	else {
+		perror("Error: Rename failed!\n");
+
+		return fopen(oldFilename, "a+");
+	}
+}
+
+FILE* clearFileTxt(FILE* txt) {
+	if (txt == NULL) {
+		printf(">Error: Invalid file pointer!\n");
+		return NULL;
+	}
+
+	fseek(txt, 0, SEEK_END);
+	long fileSize = ftell(txt);
+
+	printf("> Current file size before clearing: %ld bytes.\n", fileSize);
+	int fileDescriptor = fileno(txt);
+
+	if (_chsize(fileDescriptor, 0) == 0) {
+		printf(">File contents successfully cleared.\n");
+	}
+	else {
+		perror("Error: Failed to clear file contents!\n");
+		return EOF;
+	}
 	rewind(txt);
+	return(txt);
 }

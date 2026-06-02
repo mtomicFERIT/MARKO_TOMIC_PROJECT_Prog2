@@ -22,6 +22,8 @@ extern PROFILE* activeSession;
 extern FILE* textFilePointer;
 extern PROFILE profileArray[32];
 extern PROFILE* pArrayPTR;
+extern PROFILE* targetAccount;
+extern PROFILE** activeDelSession;
 
 enum startMenu { EXIT, AREG, LOGIN, LOGOUT, DELETE, SORTSEARCH, FILE_MENU }OPTIONS;
 
@@ -50,18 +52,20 @@ void menuMain() {
 	printf(">Please input a number to select an action: \t");
 
 	do {
-		scanf("%d", &selection);
-		if (scanf("%d", &selection) != 1) {
-			printf(">Please enter a number!\n");
-			printf(">Exiting program... \t");
-			exit(EXIT_FAILURE);
+		while (1) {
+			if (scanf("%d", &selection) != 1) {
+				printf(">Please enter a number!\n");
+				while (getchar() != '\n');
+				continue;
+			}
+			else if (selection < 0 || selection > 6) {
+				printf(">Selection cannot be decimal or negative!\n");
+				printf(">Selection must be in range from 0 to 6.\n");
+				printf(">Please input a new number to select an action: \t");
+			}
+			break;
 		}
-		else if (selection < 0 || selection >= 6) {		
-			printf(">Selection cannot be decimal or negative!\n");
-			printf(">Selection must be in range from 0 to 6.\n");
-			printf(">Please input a new number to select an action: \t");
-		}
-	} while ((selection < 0 || selection >= 6));
+	} while ((selection < 0 || selection > 6));
 
 	printf("\n>Selection memorised.\n");
 	printf(">Option selected: %d\n", selection);
@@ -104,16 +108,45 @@ void displayAccountMenu(PROFILE* profileArray, int numAccounts) {
 	printf("ACCOUNT MENU -------------------------------------");
 }
 
-void fileMenu() {
-	//enum txtMenu {RENAME, CLEAN}OPTIONS_TXT;
-}
+enum txtMenu { RENAME, CLEAN_ALL };
 
-void settingsMenu() {
-	//displayAccountMenu();
-	//chooseAccount();
-	//settingsMenu();
-	//chooseSetting();
-	// ...
-	//configureName();
-	// ...
+void fileMenu(FILE* txt, const char* oldFilename) {
+	int fSelect = 0;
+
+	printf("\n");
+	printf(">FILE MENU ---------------------------------------\n");
+	printf("\n");
+	printf("%d - Rename file (temporary) \n", RENAME);
+	printf("%d - Clean the contents of the file \n", CLEAN_ALL);
+	printf("\n");
+	printf(">FILE MENU ---------------------------------------\n");
+	printf("\n");
+	printf("Which action do you want to perform? Select one: ");
+
+	while (1) {
+		if (scanf("%d", &fSelect) != 1) {
+			printf(">Please enter a number!\n");
+			while (getchar() != '\n');
+			continue;
+		}
+		break;
+	}
+
+	switch (fSelect) {
+
+	case RENAME: {
+		printf(">Renaming file to %s\n");
+		txt = renameFileTxt(txt, oldFilename);
+		break;
+	}
+	case CLEAN_ALL: {
+		printf(">Cleaning file contents...\n");
+		clearFileTxt(txt);
+		break;
+	}
+	default: {
+		printf(">No option was selected!\n");
+		break;
+	}
+	}
 }

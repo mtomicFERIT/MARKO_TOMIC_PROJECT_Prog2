@@ -22,6 +22,8 @@ extern PROFILE* activeSession;
 extern FILE* textFilePointer;
 extern PROFILE profileArray[32];
 extern PROFILE* pArrayPTR;
+PROFILE* targetAccount;
+PROFILE** activeDelSession;
 
 int confirmAction() {
 	char request = '0';
@@ -42,7 +44,7 @@ int confirmAction() {
 	}
 }
 //// MAKING THE MAIN MENU SELECTION
-void checkSelection(int selection, PROFILE* pArrayPTR, int numProfiles) {
+void checkSelection(int selection, PROFILE* currentProfile, PROFILE* pArrayPTR, int numProfiles) {
 
 	enum startMenu { EXIT, AREG, LOGIN, LOGOUT, DELETE, SORTSEARCH, FILE_MENU };
 	if (selection == EXIT) {
@@ -67,15 +69,14 @@ void checkSelection(int selection, PROFILE* pArrayPTR, int numProfiles) {
 		logoutOfAccount(activeSession);
 	}
 	else if (selection == DELETE) {
-		int iTargetAcc;
 		chooseAccount(profileArray, accQuantity);
-		//deleteAccount(profileArray, accQuantity, , activeSession);
+		deleteAccount(profileArray, accQuantity, targetAccount, activeDelSession);
 	}
 	else if (selection == SORTSEARCH) {
 		sortMenu(pArrayPTR, numProfiles);
 	}
 	else if (selection == FILE_MENU) {
-		fileMenu();
+		fileMenu(textFilePointer, "account_storage.txt");
 	}
 
 }
@@ -119,6 +120,7 @@ void accountRegistration() {
 		copyToTxt(regProfile, textFilePointer);
 		printf("\n>User successfully registered!\n");
 	}
+	return;
 	//queryMainMenu;
 }
 /*
@@ -340,17 +342,20 @@ void printAccount(PROFILE* currentProfile) {
 	printf("+====================================================================+\n");
 }
 
-void copyToTxt(PROFILE* currentProfile, FILE* storage) {
-	isPointerValidProfile(currentProfile);
+void copyToTxt(const PROFILE* currentProfile, FILE* storage) {
+	if (currentProfile == NULL) {
+		fprintf(stderr, "\n>Error: profile pointer is NULL!");
+	}
 	if (storage == NULL) {
-		perror("\nStorage file pointer pointed at null!\n");
+		fprintf(stderr, "\n>Error: Storage file pointer pointed at NULL!\n");
 		printf(">Storage not accessible.");
+		return;
 	}
 
 	fprintf(storage, "\n");
-	fprintf(storage, "Username: %s \n", currentProfile->username);
-	fprintf(storage, "Region: %s \n", currentProfile->region);
-	fprintf(storage, "Hobby: %s \n", currentProfile->userHobby);
+	fprintf(storage, "Username: %s \n", currentProfile->username ? currentProfile->username : "Unknown");
+	fprintf(storage, "Region: %s \n", currentProfile->region ? currentProfile->region : "Unknown");
+	fprintf(storage, "Hobby: %s \n", currentProfile->userHobby ? currentProfile->userHobby : "Unknown");
 	fprintf(storage, "Age: %d \n", currentProfile->age);
 	fprintf(storage, "Account ID: %d \n", currentProfile->userID);
 }
@@ -380,6 +385,7 @@ PROFILE* chooseAccount(PROFILE* profileArray, int numAccounts) {
 		for (i = 0; i <= numAccounts; i++) {
 			if (profileArray[i].userID == chosenAccID) {
 				selectedAccount = &profileArray[i];
+				targetAccount = selectedAccount;
 				printf("\n>Profile with ID %d found and selected.\n", selectedAccount->userID);
 				printAccount(selectedAccount);
 
@@ -434,7 +440,7 @@ PROFILE* logoutOfAccount(PROFILE* activeSession) {
 
 //// ACCOUNT DELETION (FINDING INDEX, MOVING ACCOUNTS, DECREASING CURRENT AMOUNT)
 
-void deleteAccount(PROFILE* profileArray, int* numAccounts, int targetID, PROFILE** activeSession) {
+void deleteAccount(PROFILE* profileArray, int* numAccounts, int targetID, PROFILE** activeDelSession) {
 	int i, j;
 	int foundIndex = -1;
 
@@ -449,9 +455,9 @@ void deleteAccount(PROFILE* profileArray, int* numAccounts, int targetID, PROFIL
 		return;
 	}
 
-	if (*activeSession != NULL && *activeSession == &profileArray[foundIndex]) {
+	if (*activeDelSession != NULL && *activeDelSession == &profileArray[foundIndex]) {
 		printf(">Notice: Deleting the currently active account. Logging out...\n");
-		*activeSession = NULL;
+		*activeDelSession = NULL;
 	}
 
 	for (j = foundIndex; j < *numAccounts - 1; j++) {
