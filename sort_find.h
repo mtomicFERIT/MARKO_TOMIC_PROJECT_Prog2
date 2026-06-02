@@ -16,10 +16,11 @@
 typedef struct userData PROFILE;
 
 //// SORTING FUNCTIONS
-void sortMenu();
+void sortMenu(PROFILE* profiles, int numProfiles);
 
 void genericSort(PROFILE* profileArray, int numAccounts, int (*compareFunc)(PROFILE*, PROFILE*));
-int compareByUsername(PROFILE* firstAcc, PROFILE* secondAcc);
+int compareByUsernameNAlph(PROFILE* firstAcc, PROFILE* secondAcc);
+int compareByUsernameRAlph(PROFILE* firstAcc, PROFILE* secondAcc);
 int compareByAge(PROFILE* firstAcc, PROFILE* secondAcc);
 int compareByRegions(PROFILE* firstAcc, PROFILE* secondAcc);
 int compareByHobbies(PROFILE* firstAcc, PROFILE* secondAcc);

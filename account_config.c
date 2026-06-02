@@ -13,6 +13,14 @@
 #include <time.h>
 #include <corecrt_search.h>
 //#include <corecrt.h>
+//// GLOBAL VARIABLES & INLINE FUNCTIONS
+// MACROS
+#define MAX_P 32
+extern int accQuantity;
+extern PROFILE* activeSession;
+extern FILE* textFilePointer;
+extern PROFILE profileArray[32];
+extern PROFILE* pArrayPTR;
 
 //// ACCOUNT SETTINGS CONFIGURATION
 int chooseSetting() {

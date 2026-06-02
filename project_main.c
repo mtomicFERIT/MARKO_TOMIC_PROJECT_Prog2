@@ -17,9 +17,15 @@
 #include <corecrt_search.h>
 //#include <corecrt.h>
 
-////CODE VISIBLE TO ALL FUNCTIONS // GLOBAL VARIABLES & INLINE FUNCTIONS
+//// GLOBAL VARIABLES & INLINE FUNCTIONS
+// MACROS
+#define MAX_P 32
+//
+extern int accQuantity;
 PROFILE* activeSession = NULL;
 FILE* textFilePointer = NULL;
+PROFILE profileArray[MAX_P] = { 0 };
+PROFILE* pArrayPTR = profileArray;
 
 inline int increment(int inputINT) {
 	int resultINT;

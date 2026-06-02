@@ -13,10 +13,15 @@
 #include <time.h>
 #include <corecrt_search.h>
 //#include <corecrt.h>
-//-----------------------------//
+//// GLOBAL VARIABLES & INLINE FUNCTIONS
+// MACROS
 #define MAX_P 32
-//-----------------------------//
+//
+extern int accQuantity;
+extern PROFILE* activeSession;
 extern FILE* textFilePointer;
+extern PROFILE profileArray[32];
+extern PROFILE* pArrayPTR;
 
 int confirmAction() {
 	char request = '0';
@@ -36,10 +41,10 @@ int confirmAction() {
 		return 0;
 	}
 }
+//// MAKING THE MAIN MENU SELECTION
+void checkSelection(int selection, PROFILE* pArrayPTR, int numProfiles) {
 
-void checkSelection(int selection) {
-
-	enum startMenu { EXIT, AREG, LOGIN, LOGOUT, DELETE, SORTSEARCH, ERASE_MENU, FILE_MENU };
+	enum startMenu { EXIT, AREG, LOGIN, LOGOUT, DELETE, SORTSEARCH, FILE_MENU };
 	if (selection == EXIT) {
 		freeAllAccounts(textFilePointer);
 		memsetZeros(textFilePointer);
@@ -47,32 +52,30 @@ void checkSelection(int selection) {
 		exit(0);
 	}
 	else if (selection == AREG) {
+		int arIter;
 		accountRegistration();
-		//copyToTxt();
+		for (arIter = 0; arIter < accQuantity; arIter++) {
+			copyToTxt(&pArrayPTR[arIter], textFilePointer);
+		}
 	}
 	else if (selection == LOGIN) {
-		//displayAccountMenu();
-		//chooseAccount();
-		//loginToAccount();
+		chooseAccount(profileArray, accQuantity);
+		loginToAccount(profileArray, accQuantity);
 	}
 	else if (selection == LOGOUT) {
-		//displayAccountMenu();
-		//chooseAccount();
-		//logoutOfAccount();
+		chooseAccount(profileArray, accQuantity);
+		logoutOfAccount(activeSession);
 	}
 	else if (selection == DELETE) {
-		//displayAccountMenu();
-		//chooseAccount();
-		//deleteAccount();
+		int iTargetAcc;
+		chooseAccount(profileArray, accQuantity);
+		//deleteAccount(profileArray, accQuantity, , activeSession);
 	}
 	else if (selection == SORTSEARCH) {
-		
-	}
-	else if (selection == ERASE_MENU) {
-		
+		sortMenu(pArrayPTR, numProfiles);
 	}
 	else if (selection == FILE_MENU) {
-
+		fileMenu();
 	}
 
 }
@@ -83,7 +86,6 @@ void accountRegistration() {
 	PROFILE profileDatabase[MAX_P] = { 0 };
 	PROFILE* regProfile = NULL;
 	int regIter = 0;
-	int accQuantity = 0;
 
 	printf("How many accounts to register?\n");
 	//scanf("%d", &accQuantity);
@@ -114,6 +116,7 @@ void accountRegistration() {
 		enterHobby(regProfile);
 
 		printAccount(regProfile);
+		copyToTxt(regProfile, textFilePointer);
 		printf("\n>User successfully registered!\n");
 	}
 	//queryMainMenu;
@@ -463,49 +466,187 @@ void deleteAccount(PROFILE* profileArray, int* numAccounts, int targetID, PROFIL
 //
 // GENERIC PROFILE SORTING (BUBBLE SORT)
 
-void sortMenu() {
+enum sortMenuOptions {
+	ESCAPE_SMENU, SORT_UNA, SORT_URA, SORT_A, SORT_R, SORT_H, SORT_ID, SEARCH_U,
+	SEARCH_AOT, SEARCH_AYT, SEARCH_R, SEARCH_H, SEARCH_ID
+};
+
+void sortMenu(PROFILE* profiles, int numProfiles) {
 	int sortMenuSelect = 0;
-	enum searchMenu {SORT_U, SORT_A, SORT_R, SORT_H, SORT_ID, SEARCH_U, 
-					SEARCH_AOT, SEARCH_AYT, SEARCH_R, SEARCH_H, SEARCH_ID};
 
-	if (scanf("%d", &sortMenuSelect) != 1) {
-		printf(">Please enter a number!");
-		sortMenu();
-	}
-	if (sortMenuSelect = SORT_U) {
-										
-	}
-	if (sortMenuSelect = SORT_A) {
+	printf(">SORT-SEARCH MENU ------------------------------------------------ \n");
+	printf("\n");
+	printf("\t %d - Exit \n", ESCAPE_SMENU);
+	printf("\n");
+	printf(">SORTING\n");
+	printf("\t %d - Sort accounts by username (in alphabetic order) \n", SORT_UNA);
+	printf("\t %d - Sort accounts by username (in reverse alphabetic order) \n", SORT_URA);
+	printf("\t %d - Sort accounts by age \n", SORT_A);
+	printf("\t %d - Sort accounts by region \n", SORT_R);
+	printf("\t %d - Sort accounts by hobbies \n", SORT_H);
+	printf("\t %d - Sort accounts by ID \n", SORT_ID);
+	printf("\n");
+	printf(">SEARCHING\n");
+	printf("\t %d - Search accounts by username (in alphabetic order) \n", SEARCH_U);
+	printf("\t %d - Search accounts by age (older than age set) \n", SEARCH_AOT);
+	printf("\t %d - Search accounts by age (younger than age set) \n", SEARCH_AYT);
+	printf("\t %d - Search accounts by region (checks if regions match) \n", SEARCH_R);
+	printf("\t %d - Search accounts by hobby (checks if hobbies match) \n", SEARCH_H);
+	printf("\t %d - Search accounts by ID (first to last) \n", SEARCH_ID);
+	printf("\n");
+	printf(">SORT-SEARCH MENU ------------------------------------------------ \n");
+	printf("\n");
+	printf(">Please input a number to select an action: \t");
 
-	}
-	if (sortMenuSelect = SORT_R) {
-
-	}
-	if (sortMenuSelect = SORT_H) {
-
-	}
-	if (sortMenuSelect = SORT_ID) {
-
-	}
-	if (sortMenuSelect = SEARCH_U) {
-
-	}
-	if (sortMenuSelect = SEARCH_AOT) {
-
-	}
-	if (sortMenuSelect = SEARCH_AYT) {
-
-	}
-	if (sortMenuSelect = SEARCH_R) {
-
-	}
-	if (sortMenuSelect = SEARCH_H) {
-
-	}
-	if (sortMenuSelect = SEARCH_ID) {
-
+	while (1) {
+		if (scanf("%d", &sortMenuSelect) != 1) {
+			printf(">Please enter a valid number!\n");
+			while (getchar() != '\n');
+			continue;
+		}
+		//if (sortMenuSelect < 0 || sortMenuSelect >= 13) {
+		//	printf(">Selection number is out of bounds!\n Please try again.\n\n");
+		//	continue;
+		//}
+		break;
 	}
 
+	switch (sortMenuSelect) {
+		//
+	case ESCAPE_SMENU: {
+		printf(">Escaping SORT-SEARCH menu...\n");
+		break;
+	}
+					 //
+	case SORT_UNA: {
+		int (*criteria)(PROFILE*, PROFILE*) = compareByUsernameNAlph;
+		genericSort(profiles, numProfiles, criteria);
+		break;
+	}
+				 //
+	case SORT_URA: {
+		int (*criteria)(PROFILE*, PROFILE*) = compareByUsernameRAlph;
+		genericSort(profiles, numProfiles, criteria);
+		break;
+	}
+				 //
+	case SORT_A: {
+		int (*criteria)(PROFILE*, PROFILE*) = compareByAge;
+		genericSort(profiles, numProfiles, criteria);
+		break;
+	}
+			   //
+	case SORT_R: {
+		genericSort(profiles, numProfiles, compareByRegions);
+		break;
+	}
+			   //
+	case SORT_H: {
+		genericSort(profiles, numProfiles, compareByHobbies);
+		break;
+	}
+			   //
+	case SORT_ID: {
+		int (*criteria)(PROFILE*, PROFILE*) = compareByID;
+		genericSort(profiles, numProfiles, criteria);
+		break;
+	}
+				//
+	case SEARCH_U: {
+		char soughtUsername[30] = { 0 };
+		char* soughtUsernamePTR = soughtUsername;
+		if (scanf("%29s", soughtUsername) != 1) {
+			printf(">Please enter a valid character!");
+		}
+		genericSearch(profiles, numProfiles, soughtUsernamePTR, matchByUsername);
+		break;
+	}
+				 //
+	case SEARCH_AOT: {
+		int cutoffAge = 19;
+		char choiceSearch = '0';
+		printf("Do you want to change the default cutoff age for this specific search?\n");
+		printf("The default is set to %d.\n", cutoffAge);
+		scanf("%c", &choiceSearch);
+		if (choiceSearch == 'Y' || choiceSearch == 'y') {
+			printf(">Enter minimum age cutoff: ");
+			if (scanf("%d", &cutoffAge) == 1) {
+				genericSearch(profiles, numProfiles, &cutoffAge, matchOlderThan);
+				break;
+			}
+		}
+		else {
+			genericSearch(profiles, numProfiles, &cutoffAge, matchYoungerThan);
+			break;
+		}
+	}
+				   //
+	case SEARCH_AYT: {
+		int cutoffAge = 19;
+		char choiceSearch = '0';
+		printf("Do you want to change the default cutoff age for this one search?\n");
+		printf("The default is set to %d.\n", cutoffAge);
+		scanf("%c", &choiceSearch);
+		if (choiceSearch == 'Y' || choiceSearch == 'y') {
+			printf(">Enter minimum age cutoff: ");
+			if (scanf("%d", &cutoffAge) == 1) {
+				genericSearch(profiles, numProfiles, &cutoffAge, matchYoungerThan);
+				break;
+			}
+		}
+		else {
+			genericSearch(profiles, numProfiles, &cutoffAge, matchYoungerThan);
+			break;
+		}
+	}
+				   //
+	case SEARCH_R: {
+		char soughtRegion[50] = { 0 };
+		char* soughtRegionPTR = soughtRegion;
+		while (1) {
+			if (scanf("%49s", soughtRegion) != 1) {
+				printf(">Please enter a valid character!");
+				while (getchar() != '\n');
+				continue;
+			}
+			break;
+		}
+		genericSearch(profiles, numProfiles, soughtRegionPTR, matchByRegion);
+		break;
+	}
+				 //
+	case SEARCH_H: {
+		char soughtHobby[30] = { 0 };
+		char* soughtHobbyPTR = soughtHobby;
+		while (1) {
+			if (scanf("%29s", soughtHobby) != 1) {
+				printf(">Please enter a valid character!");
+				while (getchar() != '\n');
+				continue;
+			}
+			break;
+		}
+		genericSearch(profiles, numProfiles, soughtHobbyPTR, matchByHobby);
+		break;
+	}
+				 //
+	case SEARCH_ID: {
+		int soughtID = 0;
+		printf(">Enter account ID to search for:  ");
+		if (scanf("%d", &soughtID) != 1) {
+			printf(">Invalid ID number!\n");
+			while (getchar() != '\n');
+		}
+		else {
+			genericSearch(profiles, numProfiles, &soughtID, matchByID);
+		}
+		break;
+	}
+	default: {
+		printf(">Selection is out of bounds!\n");
+		queryMainMenu();
+	}
+	}
 }
 
 int compareByID(PROFILE* firstAcc, PROFILE* secondAcc) {
@@ -516,8 +657,12 @@ int compareByAge(PROFILE* firstAcc, PROFILE* secondAcc) {
 	return firstAcc->age > secondAcc->age;
 }
 
-int compareByUsername(PROFILE* firstAcc, PROFILE* secondAcc) {
+int compareByUsernameNAlph(PROFILE* firstAcc, PROFILE* secondAcc) {
 	return strcmp(firstAcc->username, secondAcc->username) > 0;
+}
+
+int compareByUsernameRAlph(PROFILE* firstAcc, PROFILE* secondAcc) {
+	return strcmp(firstAcc->username, secondAcc->username) < 0;
 }
 
 int compareByRegions(PROFILE* firstAcc, PROFILE* secondAcc) {

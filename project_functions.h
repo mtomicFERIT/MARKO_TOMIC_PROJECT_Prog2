@@ -12,6 +12,9 @@
 #include <time.h>
 #include <corecrt_search.h>
 //#include <corecrt.h>
+//// GLOBAL VARIABLES & INLINE FUNCTIONS
+// MACROS
+#define MAX_P 32
 
 ////-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-////
 //// STRUCTURES
@@ -30,7 +33,7 @@ typedef struct userData {
 ////-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-////
 //// MENU NAVIGATION 
 void menuMain();
-void checkSelection(int selection);
+void checkSelection(int selection, PROFILE* pArrayPTR, int numProfiles);
 int queryMainMenu();
 void settingsMenu();
 void memoryMenu();
