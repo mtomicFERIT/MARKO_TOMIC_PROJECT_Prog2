@@ -463,23 +463,49 @@ void deleteAccount(PROFILE* profileArray, int* numAccounts, int targetID, PROFIL
 //
 // GENERIC PROFILE SORTING (BUBBLE SORT)
 
-void genericSort(PROFILE* profileArray, int numAccounts, int (*compareFunc)(PROFILE*, PROFILE*)) {
-	int i, j;
-	PROFILE temp;
+void sortMenu() {
+	int sortMenuSelect = 0;
+	enum searchMenu {SORT_U, SORT_A, SORT_R, SORT_H, SORT_ID, SEARCH_U, 
+					SEARCH_AOT, SEARCH_AYT, SEARCH_R, SEARCH_H, SEARCH_ID};
 
-	for (i = 0; i < numAccounts - 1; i++) {
-		for (j = 0; j < numAccounts - i - 1; j++) {
-
-			if (compareFunc(&profileArray[j], &profileArray[j + 1])) {
-
-				temp = profileArray[j];
-				profileArray[j] = profileArray[j + 1];
-				profileArray[j + 1] = temp;
-
-			}
-		}
+	if (scanf("%d", &sortMenuSelect) != 1) {
+		printf(">Please enter a number!");
+		sortMenu();
 	}
-	printf(">Array successfully sorted using the selected criteria.\n");
+	if (sortMenuSelect = SORT_U) {
+										
+	}
+	if (sortMenuSelect = SORT_A) {
+
+	}
+	if (sortMenuSelect = SORT_R) {
+
+	}
+	if (sortMenuSelect = SORT_H) {
+
+	}
+	if (sortMenuSelect = SORT_ID) {
+
+	}
+	if (sortMenuSelect = SEARCH_U) {
+
+	}
+	if (sortMenuSelect = SEARCH_AOT) {
+
+	}
+	if (sortMenuSelect = SEARCH_AYT) {
+
+	}
+	if (sortMenuSelect = SEARCH_R) {
+
+	}
+	if (sortMenuSelect = SEARCH_H) {
+
+	}
+	if (sortMenuSelect = SEARCH_ID) {
+
+	}
+
 }
 
 int compareByID(PROFILE* firstAcc, PROFILE* secondAcc) {
@@ -502,14 +528,76 @@ int compareByHobbies(PROFILE* firstAcc, PROFILE* secondAcc) {
 	return strcmp(firstAcc->userHobby, secondAcc->userHobby) > 0;
 }
 
-void searchByUsername(char* username, char* usernameMatch) {
+void genericSort(PROFILE* profileArray, int numAccounts, int (*compareFunc)(PROFILE*, PROFILE*)) {
+	int i, j;
+	PROFILE temp;
 
+	for (i = 0; i < numAccounts - 1; i++) {
+		for (j = 0; j < numAccounts - i - 1; j++) {
+
+			if (compareFunc(&profileArray[j], &profileArray[j + 1])) {
+
+				temp = profileArray[j];
+				profileArray[j] = profileArray[j + 1];
+				profileArray[j + 1] = temp;
+
+			}
+		}
+	}
+	printf(">Array successfully sorted using the selected criteria.\n");
 }
 
-void searchByRegion(char* region, char* regionMatch) {
-
+int matchByUsername(PROFILE* p, void* searchTerm) {
+	char* targetUsername = (char*)searchTerm;
+	return strcmp(p->username, targetUsername) == 0;
 }
 
-void searchByHobby(char* hobby, char* hobbyMatch) {
-
+int matchOlderThan(PROFILE* p, void* searchTerm) {
+	int targetAge = *(int*)searchTerm;
+	return p->age > targetAge;
 }
+
+int matchYoungerThan(PROFILE* p, void* searchTerm) {
+	int targetAge = *(int*)searchTerm;
+	return p->age < targetAge;
+}
+
+int matchByRegion(PROFILE* p, void* searchTerm) {
+	char* targetRegion = (char*)searchTerm;
+	return strcmp(p->region, targetRegion) == 0;
+}
+
+int matchByHobby(PROFILE* p, void* searchTerm) {
+	char* targetHobby = (char*)searchTerm;
+	return strcmp(p->userHobby, targetHobby) == 0;
+}
+
+int matchByID(PROFILE* p, void* searchTerm) {
+	int targetID = *(int*)searchTerm;
+	return p->userID > targetID;
+}
+
+void genericSearch(PROFILE* profileArray, int numAccounts, void* searchTerm, 
+										int (*matchFunc)(PROFILE*, void*)) {
+	int i;
+	int foundCount = 0;
+
+	printf("\n---------------- SEARCH RESULTS ------------------\n");
+
+	for (i = 0; i < numAccounts; i++) {
+		
+		if (matchFunc(&profileArray[i], searchTerm)) {
+			printAccount(&profileArray[i]); 
+			foundCount++;
+		}
+	}
+
+	if (foundCount == 0) {
+		printf(">No profiles matched the given search criteria.\n");
+	}
+	else {
+		printf(">Found %d matching profile(s).\n", foundCount);
+	}
+	printf("---------------------------------------------------\n\n");
+}
+
