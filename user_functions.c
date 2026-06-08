@@ -73,7 +73,7 @@ void checkSelection(int selection, PROFILE* currentProfile, PROFILE* pArrayPTR, 
 	}
 	else if (selection == DELETE) {
 		chooseAccount(profileArray, accQuantity);
-		deleteAccount(profileArray, accQuantity, targetAccount, activeDelSession);
+		deleteAccount(profileArray, &accQuantity, targetAccount, activeSession);
 	}
 	else if (selection == SORTSEARCH) {
 		sortMenu(pArrayPTR, numProfiles);
@@ -167,6 +167,7 @@ void hidePassword(char* passwordPTR) {
 }
 
 void enterPassword(PROFILE* profilePTR) {
+	int passCharCounter = 0;
 	char password[30] = { 0 };
 	char* passwordPTR = password;
 
@@ -182,10 +183,21 @@ void enterPassword(PROFILE* profilePTR) {
 		scanf("%29s", passVerifPTR);
 		hidePassword(passVerifPTR);
 
-		if (strcmp(password, passVerif) == 0) {
-			printf(">Password verified!");
-			strcpy(profilePTR->password, password);
-			break;
+		for (passCharCounter = 0; password[passCharCounter] != '\0'; passCharCounter++);
+		if (passCharCounter <= 3) {
+			printf("\n\t>Your password must be at least 4 characters long!\n");
+			enterPassword(profilePTR);
+		}
+
+		if ((strcmp(password, passVerif) == 0)) {
+			if (passCharCounter > 3) {
+				printf(">Password verified and stored!");
+				strcpy(profilePTR->password, password);
+				break;
+			}
+			else {
+				printf("\n\t>Could not verify password. Reason: too short!\n");
+			}
 		}
 		else {
 			printf(">Passwords not matching!\n Please enter your password again.\n");
@@ -200,6 +212,11 @@ void enterEmail(PROFILE* profilePTR) {
 	int emIter;
 	int flagDot = 0;
 	int flagMonkey = 0;
+	int flagCharsBeforeMonkey = 0;
+	int flagCharsBeforeDot = 0;
+	int flagDotMonkeyCheck = 0;
+	int flagCharsAfterDot = 0;
+
 	char email[50] = { 0 };
 	char* emailPTR = email;
 
@@ -227,6 +244,38 @@ void enterEmail(PROFILE* profilePTR) {
 			}
 		}
 		if (flagMonkey == 1 && flagDot == 1) {
+			for (emIter = 0; email[emIter] != '@'; emIter++) {
+				if ( isalpha(email[emIter]) || isdigit(email[emIter]) ) {
+					flagCharsBeforeMonkey = 1;
+				}
+			}
+			printf("\t>%d characters detected before monkey (@).\n", emIter);
+		}
+		if (flagMonkey == 1 && flagDot == 1 && flagCharsBeforeMonkey == 1) {
+			for (email[emIter] = '@'; email[emIter] != '.'; emIter++) {
+				if ( (email[emIter] == '@') && (email[emIter + 1] != '.') ) {
+					flagDotMonkeyCheck = 1;
+					if ( isalpha(email[emIter]) || isdigit(email[emIter]) ) {
+						flagCharsBeforeDot = 1;
+					}
+				}
+			}
+			if (flagDotMonkeyCheck == 1 && flagCharsBeforeDot == 1) {
+				printf("\t>%d characters detected in between monkey (@) and dot.\n", emIter);
+			}
+		}
+		if (flagMonkey == 1 && flagDot == 1 && flagCharsBeforeMonkey == 1 
+			&& flagCharsBeforeDot == 1 && flagDotMonkeyCheck == 1) {
+			for (email[emIter] = '.'; email[emIter] != '\0'; emIter++) {
+				if ( isalpha(email[emIter]) || isdigit(email[emIter]) ) {
+					flagCharsAfterDot = 1;
+				}
+			}
+			printf("\t>%d characters detected after dot.\n", emIter);
+		}
+		// FINAL CHECK FOR E-MAIL
+		if (flagMonkey == 1 && flagDot == 1 && flagDotMonkeyCheck == 1 &&
+			flagCharsBeforeMonkey == 1 && flagCharsBeforeDot == 1 && flagCharsAfterDot == 1) {
 			printf(">E-mail is valid! \n");
 			strcpy(profilePTR->email, email);
 			break;
@@ -238,6 +287,15 @@ void enterEmail(PROFILE* profilePTR) {
 			}
 			if (flagDot == 0) {
 				printf("\t>Your e-mail adress must feature at least one dot!\n");
+			}
+			if (flagCharsBeforeMonkey == 0) {
+				printf("\t>No characters detected before monkey(@)!\n");
+			}
+			if (flagCharsBeforeDot == 0 || flagDotMonkeyCheck == 0) {
+				printf("\t>No characters detected before dot!\n");
+			}
+			if (flagCharsAfterDot == 0) {
+				printf("\t>No characters detected after dot!\n");
 			}
 			printf(">Please enter your e-mail address again.\n\n");
 			flagMonkey = 0;
@@ -450,11 +508,11 @@ PROFILE* logoutOfAccount(PROFILE* activeSession) {
 
 //// ACCOUNT DELETION (FINDING INDEX, MOVING ACCOUNTS, DECREASING CURRENT AMOUNT)
 
-void deleteAccount(PROFILE* profileArray, int* numAccounts, int targetID, PROFILE** activeDelSession) {
+void deleteAccount(PROFILE* profileArray, int* numAccounts, int targetID, PROFILE* activeDelSession) {
 	int i, j;
 	int foundIndex = -1;
 
-	for (i = 0; i < *numAccounts; i++) {
+	for (i = 0; i < *numAccounts; i++) { //nullptr error <--- to fix
 		if (profileArray[i].userID == targetID) {
 			foundIndex = i;
 			break;
@@ -465,9 +523,9 @@ void deleteAccount(PROFILE* profileArray, int* numAccounts, int targetID, PROFIL
 		return;
 	}
 
-	if (*activeDelSession != NULL && *activeDelSession == &profileArray[foundIndex]) {
+	if (activeDelSession != NULL && activeDelSession == &profileArray[foundIndex]) {
 		printf(">Notice: Deleting the currently active account. Logging out...\n");
-		*activeDelSession = NULL;
+		activeDelSession = NULL;
 	}
 
 	for (j = foundIndex; j < *numAccounts - 1; j++) {

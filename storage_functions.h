@@ -29,7 +29,7 @@ FILE* clearFileTxt(FILE* txt);
 //// ACCOUNT CREATE//READ//INSERT//UPDATE//DELETE (CRUD) FUNCTIONS
 void storeAccount(PROFILE* accHeapOne);
 void copyToTxt(const PROFILE* currentProfile, FILE* storage);
-void deleteAccount(PROFILE* profileArray, int* numAccounts, int targetID, PROFILE** activeDelSession);
+void deleteAccount(PROFILE* profileArray, int* numAccounts, int targetID, PROFILE* activeDelSession);
 void freeAllAccounts(FILE* textFilePointer);
 void memsetZeros(FILE* textFilePointer);
 //// ACCOUNT SETTINGS CONFIGURATION
