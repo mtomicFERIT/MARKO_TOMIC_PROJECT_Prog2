@@ -1,0 +1,6 @@
+
+Username: bob 
+Region: croatia 
+Hobby: f 
+Age: 20 
+Account ID: 0 

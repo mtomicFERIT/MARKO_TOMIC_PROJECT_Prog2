@@ -11,8 +11,10 @@
 #include <stdlib.h>
 #include <time.h>
 #include <corecrt_search.h>
-//#include <corecrt.h>
-//// GLOBAL VARIABLES & INLINE FUNCTIONS
+#include <io.h>
+#include <errno.h>
+
+//// GLOBAL VARIABLES // PROJECT_FUNCTIONS.H // PFUNC
 // MACROS
 #define MAX_P 32
 
@@ -33,7 +35,7 @@ typedef struct userData {
 ////-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-////
 //// MENU NAVIGATION 
 void menuMain();
-void checkSelection(int selection, PROFILE* pArrayPTR, int numProfiles);
+void checkSelection(int selection, PROFILE* currentProfile, PROFILE* pArrayPTR, int numProfiles);
 int queryMainMenu();
 void fileMenu(FILE* txt, const char* oldFilename);
 

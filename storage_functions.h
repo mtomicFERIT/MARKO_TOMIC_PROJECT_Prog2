@@ -11,8 +11,10 @@
 #include <stdlib.h>
 #include <time.h>
 #include <corecrt_search.h>
-//#include <corecrt.h>
-//// GLOBAL VARIABLES & INLINE FUNCTIONS
+#include <io.h>
+#include <errno.h>
+
+//// GLOBAL VARIABLES // STORAGE_FUNCTIONS.H
 // MACROS
 #define MAX_P 32
 

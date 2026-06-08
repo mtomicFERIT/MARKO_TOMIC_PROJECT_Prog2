@@ -11,7 +11,12 @@
 #include <stdlib.h>
 #include <time.h>
 #include <corecrt_search.h>
-//#include <corecrt.h>
+#include <io.h>
+#include <errno.h>
+
+//// GLOBAL VARIABLES // SORT_FIND.H
+// MACROS
+#define MAX_P 32
 
 typedef struct userData PROFILE;
 

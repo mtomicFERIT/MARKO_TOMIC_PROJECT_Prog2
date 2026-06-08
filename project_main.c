@@ -2,8 +2,6 @@
 ////-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-////
 #define _CRT_SECURE_NO_WARNINGS
 #pragma once
-#define BOOLTRUE 1
-#define BOOLFALSE 0
 //// LIBRARIES
 #include "project_functions.h"
 #include "storage_functions.h"
@@ -15,9 +13,10 @@
 #include <stdlib.h>
 #include <time.h>
 #include <corecrt_search.h>
-//#include <corecrt.h>
+#include <io.h>
+#include <errno.h>
 
-//// GLOBAL VARIABLES & INLINE FUNCTIONS
+//// GLOBAL VARIABLES & INLINE FUNCTIONS // PROJECT_MAIN.C // PMAIN
 // MACROS
 #define MAX_P 32
 //
@@ -47,7 +46,7 @@ inline int moduloTen(int inputINT) {
 	return resultINT;
 }
 
-//// MAIN PROGRAM EXECUTION
+//// MAIN PROGRAM EXECUTION ////
 int main() {
 
 	extern FILE* textFilePointer;

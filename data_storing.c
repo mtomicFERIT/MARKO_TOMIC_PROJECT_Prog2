@@ -13,7 +13,9 @@
 #include <time.h>
 #include <corecrt_search.h>
 #include <io.h>
-//// GLOBAL VARIABLES & INLINE FUNCTIONS
+#include <errno.h>
+
+//// GLOBAL VARIABLES // DATA_STORING.C
 // MACROS
 #define MAX_P 32
 //
@@ -34,7 +36,7 @@ void openFileTxt(FILE* textFilePointer, const char* fileName) {
 // FILE
 int checkPointerTxt(FILE* textFilePointer) {
 	if (textFilePointer == NULL) {
-		printf(">Could not find the wanted text file!");
+		perror("Could not find the wanted text file!\n\n");
 		return EXIT_FAILURE;
 	}
 	else {
@@ -44,7 +46,7 @@ int checkPointerTxt(FILE* textFilePointer) {
 // PROFILE
 int isPointerValidProfile(PROFILE* profilePTR) {
 	if (profilePTR == NULL) {
-		perror("Could not find the wanted account!");
+		perror("Could not find the wanted account!\n\n");
 		return EXIT_FAILURE;
 	}
 	else {
@@ -54,7 +56,7 @@ int isPointerValidProfile(PROFILE* profilePTR) {
 // STRING
 int isPointerValidString(char* charPTR) {
 	if (charPTR == NULL) {
-		perror("Could not find the wanted string parameter.");
+		perror("Could not find the wanted string parameter\n\n.");
 		return EXIT_FAILURE;
 	}
 	else {
@@ -107,13 +109,16 @@ void freeAllAccounts(FILE* textFilePointer) {
 }
 
 void memsetZeros(FILE* textFilePointer) {
+	if (textFilePointer == NULL || textFilePointer == 0) {
+		fprintf(stderr, ">Invalid file pointer!\n Points to NULL.\n\n");
+	}
 	extern int accAmount;
 	extern PROFILE* accHeapOne;
 	memset(textFilePointer, 0, accAmount * sizeof(accHeapOne));
 }
 
 FILE* renameFileTxt(FILE* txt, const char* oldFilename) {
-	char newFilename[256];
+	char newFilename[256] = { 0 };
 
 	printf("Enter the new filename (include .txt): ");
 	if (scanf("%255s", newFilename) != 1) {
@@ -150,7 +155,7 @@ FILE* clearFileTxt(FILE* txt) {
 	fseek(txt, 0, SEEK_END);
 	long fileSize = ftell(txt);
 
-	printf("> Current file size before clearing: %ld bytes.\n", fileSize);
+	printf(">Current file size before clearing: %ld bytes.\n", fileSize);
 	int fileDescriptor = fileno(txt);
 
 	if (_chsize(fileDescriptor, 0) == 0) {

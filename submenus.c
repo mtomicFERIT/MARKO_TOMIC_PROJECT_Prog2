@@ -12,8 +12,9 @@
 #include <stdlib.h>
 #include <time.h>
 #include <corecrt_search.h>
-//#include <corecrt.h>
-//// GLOBAL VARIABLES & INLINE FUNCTIONS
+#include <io.h>
+
+//// GLOBAL VARIABLES // SUBMENUS.C
 // MACROS
 #define MAX_P 32
 //
@@ -41,8 +42,6 @@ void menuMain() {
 	printf("\t %d - Delete your account (this will also free its memory) \n", DELETE);
 	printf("\t %d - Sort & search profiles \n", SORTSEARCH);
 	printf("\t %d - Access storage text file menu \n", FILE_MENU);
-	//printf("\t %d - Access memory menu \n", ERASE_MENU);
-	//printf("\t %d - Configure account settings \n", ACONFIG);
 	printf("\n");
 	printf(">MAIN MENU ------------------------------------------------ \n");
 	printf("\n");
@@ -70,7 +69,7 @@ void menuMain() {
 	printf("\n>Selection memorised.\n");
 	printf(">Option selected: %d\n", selection);
 
-	checkSelection(selection, pArrayPTR, accQuantity);
+	checkSelection(selection, activeSession, pArrayPTR, accQuantity);
 }
 
 int queryMainMenu() {
@@ -99,7 +98,6 @@ void displayAccountMenu(PROFILE* profileArray, int numAccounts) {
 	}
 	else {
 		for (di = 0; di < numAccounts; di++) {
-			//printf("[%d]. ", i + 1);
 			printAccount(&profileArray[di]);
 		}
 		printf("ACCOUNT MENU -------------------------------------");
@@ -116,7 +114,7 @@ void fileMenu(FILE* txt, const char* oldFilename) {
 	printf("\n");
 	printf(">FILE MENU ---------------------------------------\n");
 	printf("\n");
-	printf("%d - Rename file (temporary) \n", RENAME);
+	printf("%d - Rename file \n", RENAME);
 	printf("%d - Clean the contents of the file \n", CLEAN_ALL);
 	printf("\n");
 	printf(">FILE MENU ---------------------------------------\n");
@@ -135,7 +133,7 @@ void fileMenu(FILE* txt, const char* oldFilename) {
 	switch (fSelect) {
 
 	case RENAME: {
-		printf(">Renaming file to %s\n");
+		printf(">Renaming file '%s'...\n", oldFilename);
 		txt = renameFileTxt(txt, oldFilename);
 		break;
 	}

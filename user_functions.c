@@ -12,8 +12,10 @@
 #include <stdlib.h>
 #include <time.h>
 #include <corecrt_search.h>
-//#include <corecrt.h>
-//// GLOBAL VARIABLES & INLINE FUNCTIONS
+#include <io.h>
+#include <errno.h>
+
+//// GLOBAL VARIABLES // USER_FUNCTIONS.C
 // MACROS
 #define MAX_P 32
 //
@@ -43,6 +45,7 @@ int confirmAction() {
 		return 0;
 	}
 }
+
 //// MAKING THE MAIN MENU SELECTION
 void checkSelection(int selection, PROFILE* currentProfile, PROFILE* pArrayPTR, int numProfiles) {
 
@@ -89,7 +92,7 @@ void accountRegistration() {
 	int regIter = 0;
 
 	printf("How many accounts to register?\n");
-	//scanf("%d", &accQuantity);
+
 	if (scanf("%d", &accQuantity) != 1) {
 		printf(">Invalid input! Returning...\n\n");
 		while (getchar() != '\n');
@@ -106,7 +109,7 @@ void accountRegistration() {
 		regProfile->userID = regIter;
 		printf("\n");
 		storeAccount(regProfile); // +. copyToTxt(regProfile);
-		
+
 		printf(">Registering User %d (System ID: %d) \n\n", regIter + 1, regProfile->userID);
 
 		enterUsername(regProfile);
@@ -249,7 +252,6 @@ void enterAge(PROFILE* profilePTR) {
 
 	while (1) {
 		printf(">Enter your age: \n");
-		//scanf("%d", &userAge);
 
 		if (scanf("%d", &userAge) != 1) {
 			printf(">Please enter a number! \n");
@@ -334,6 +336,7 @@ void printAccount(PROFILE* currentProfile) {
 	printf("+====================================================================+\n");
 	printf("| PROFILE #%d", currentProfile->userID);
 	printf("| \n");
+	printf("| \n");
 	printf("| Username: %s \n", currentProfile->username);
 	printf("| Region: %s \n", currentProfile->region);
 	printf("| Hobby: %s \n", currentProfile->userHobby);
@@ -381,7 +384,7 @@ PROFILE* chooseAccount(PROFILE* profileArray, int numAccounts) {
 			while (getchar() != '\n');
 			continue;
 		}
-		
+
 		for (i = 0; i <= numAccounts; i++) {
 			if (profileArray[i].userID == chosenAccID) {
 				selectedAccount = &profileArray[i];
@@ -398,13 +401,14 @@ PROFILE* chooseAccount(PROFILE* profileArray, int numAccounts) {
 }
 
 PROFILE* loginToAccount(PROFILE* profileArray, int numAccounts) {
-	
+
 	PROFILE* selectedAccount = chooseAccount(profileArray, numAccounts);
 	if (selectedAccount == NULL) {
 		printf(">Login failed! No account selected.\n");
 		return NULL;
 	}
 
+	char alter = '0';
 	char inputPassword[30] = { 0 };
 	int attempts = 3;
 
@@ -414,7 +418,13 @@ PROFILE* loginToAccount(PROFILE* profileArray, int numAccounts) {
 
 		if (strcmp(selectedAccount->password, inputPassword) == 0) {
 			printf("\n>>> Login successful! Welcome back, %s. <<<\n", selectedAccount->username);
-			return selectedAccount; 
+
+			printf(">Do you want to change account settings?\n");
+			scanf("%c", &alter);
+			if (alter == 'Y' || alter == 'y') {
+				alterSetting(selectedAccount);
+			}
+			return selectedAccount;
 		}
 		else {
 			attempts--;
@@ -470,7 +480,7 @@ void deleteAccount(PROFILE* profileArray, int* numAccounts, int targetID, PROFIL
 
 //// SORTING & SEARCHING ACCOUNTS
 //
-// GENERIC PROFILE SORTING (BUBBLE SORT)
+// SORT-SEARCH MENU
 
 enum sortMenuOptions {
 	ESCAPE_SMENU, SORT_UNA, SORT_URA, SORT_A, SORT_R, SORT_H, SORT_ID, SEARCH_U,
@@ -518,46 +528,46 @@ void sortMenu(PROFILE* profiles, int numProfiles) {
 	}
 
 	switch (sortMenuSelect) {
-		//
+
 	case ESCAPE_SMENU: {
 		printf(">Escaping SORT-SEARCH menu...\n");
 		break;
 	}
-					 //
+
 	case SORT_UNA: {
 		int (*criteria)(PROFILE*, PROFILE*) = compareByUsernameNAlph;
 		genericSort(profiles, numProfiles, criteria);
 		break;
 	}
-				 //
+
 	case SORT_URA: {
 		int (*criteria)(PROFILE*, PROFILE*) = compareByUsernameRAlph;
 		genericSort(profiles, numProfiles, criteria);
 		break;
 	}
-				 //
+
 	case SORT_A: {
 		int (*criteria)(PROFILE*, PROFILE*) = compareByAge;
 		genericSort(profiles, numProfiles, criteria);
 		break;
 	}
-			   //
+
 	case SORT_R: {
 		genericSort(profiles, numProfiles, compareByRegions);
 		break;
 	}
-			   //
+
 	case SORT_H: {
 		genericSort(profiles, numProfiles, compareByHobbies);
 		break;
 	}
-			   //
+
 	case SORT_ID: {
 		int (*criteria)(PROFILE*, PROFILE*) = compareByID;
 		genericSort(profiles, numProfiles, criteria);
 		break;
 	}
-				//
+
 	case SEARCH_U: {
 		char soughtUsername[30] = { 0 };
 		char* soughtUsernamePTR = soughtUsername;
@@ -567,7 +577,7 @@ void sortMenu(PROFILE* profiles, int numProfiles) {
 		genericSearch(profiles, numProfiles, soughtUsernamePTR, matchByUsername);
 		break;
 	}
-				 //
+
 	case SEARCH_AOT: {
 		int cutoffAge = 19;
 		char choiceSearch = '0';
@@ -586,7 +596,7 @@ void sortMenu(PROFILE* profiles, int numProfiles) {
 			break;
 		}
 	}
-				   //
+
 	case SEARCH_AYT: {
 		int cutoffAge = 19;
 		char choiceSearch = '0';
@@ -605,7 +615,7 @@ void sortMenu(PROFILE* profiles, int numProfiles) {
 			break;
 		}
 	}
-				   //
+
 	case SEARCH_R: {
 		char soughtRegion[50] = { 0 };
 		char* soughtRegionPTR = soughtRegion;
@@ -620,7 +630,7 @@ void sortMenu(PROFILE* profiles, int numProfiles) {
 		genericSearch(profiles, numProfiles, soughtRegionPTR, matchByRegion);
 		break;
 	}
-				 //
+
 	case SEARCH_H: {
 		char soughtHobby[30] = { 0 };
 		char* soughtHobbyPTR = soughtHobby;
@@ -635,7 +645,7 @@ void sortMenu(PROFILE* profiles, int numProfiles) {
 		genericSearch(profiles, numProfiles, soughtHobbyPTR, matchByHobby);
 		break;
 	}
-				 //
+
 	case SEARCH_ID: {
 		int soughtID = 0;
 		printf(">Enter account ID to search for:  ");
@@ -678,6 +688,8 @@ int compareByRegions(PROFILE* firstAcc, PROFILE* secondAcc) {
 int compareByHobbies(PROFILE* firstAcc, PROFILE* secondAcc) {
 	return strcmp(firstAcc->userHobby, secondAcc->userHobby) > 0;
 }
+
+// GENERIC PROFILE SORTING (BUBBLE SORT)
 
 void genericSort(PROFILE* profileArray, int numAccounts, int (*compareFunc)(PROFILE*, PROFILE*)) {
 	int i, j;
@@ -728,17 +740,16 @@ int matchByID(PROFILE* p, void* searchTerm) {
 	return p->userID > targetID;
 }
 
-void genericSearch(PROFILE* profileArray, int numAccounts, void* searchTerm, 
-										int (*matchFunc)(PROFILE*, void*)) {
+void genericSearch(PROFILE* profileArray, int numAccounts, void* searchTerm, int (*matchFunc)(PROFILE*, void*)) {
 	int i;
 	int foundCount = 0;
 
 	printf("\n---------------- SEARCH RESULTS ------------------\n");
 
 	for (i = 0; i < numAccounts; i++) {
-		
+
 		if (matchFunc(&profileArray[i], searchTerm)) {
-			printAccount(&profileArray[i]); 
+			printAccount(&profileArray[i]);
 			foundCount++;
 		}
 	}
